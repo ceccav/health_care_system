@@ -32,7 +32,3 @@ public class SuperAdminRole : IRole
 
 }
 
-public class SuperAdminUser
-{
-
-}

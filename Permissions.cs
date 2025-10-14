@@ -1,27 +1,22 @@
 namespace App;
 
-public class AdminPermissions
+public class AdminPermissions       //sets all to false by default
 {
-    private bool _canManagePermissions;
-    private bool _canAssignRegions;
-    private bool _canHandleRegistrations;
+    private bool _canManagePermissions = false;
+    private bool _canAssignRegions = false;
+    private bool _canHandleRegistrations = false;
 
 
-    public AdminPermissions()
-    {
-        _canManagePermissions = true;
-        _canAssignRegions = true;
-        _canHandleRegistrations = true;
-    }
-    // check methods 
-    public bool CanManagePermissions() => _canManagePermissions;
-    public bool CanManageRegions() => _canAssignRegions;
-    public bool CanHandleRegistrations() => _canHandleRegistrations;
-
-    // 
 
 
+
+    public void EnablePermission() { _canManagePermissions = true; }
+    public void EnableRegionAssignment() { _canAssignRegions = true; }
+
+    public void EnableRegistrationHandling() { _canHandleRegistrations = true; }
 
 }
+
+
 
 
