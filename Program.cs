@@ -1,8 +1,11 @@
 ﻿using App;
 
+// Reads in all users from data/users.txt
+Login_System.Init();
+
 bool loginmenu = true;
 
-while(loginmenu)
+while (loginmenu)
 {
     Console.WriteLine("Select a option");
     Console.WriteLine("1. Register as a patient");
@@ -13,10 +16,10 @@ while(loginmenu)
     switch (option)
     {
         case "1":
-            Userservice.RegisterUser();
+            Login_System.RegisterUser();
             break;
         case "2":
-            Userservice.LoginUser();
+            Login_System.LoginUser();
             break;
         case "3":
             loginmenu = false;
