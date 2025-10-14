@@ -8,37 +8,50 @@ namespace App;
 // Class holding methods to save data
 public static class Utils
 {
-    public static void SaveLogin()
-    {
-        using (StreamWriter writer = new StreamWriter("userdata.txt"))
-        {
-            Console.WriteLine("Write your username");
-            string Username = Console.ReadLine();
-            Console.WriteLine("Write your password");
-            string Password = Console.ReadLine();
+    //searchpath for the file with user data
+    private static readonly string FilePath = Path.Combine("data, users.txt");
 
-            writer.WriteLine(Username, Password);     //writer.writeline only writes to userdata.txt not in the console
+    //method to save user logindata to file, as a static void so that we can implement it easier in our code
+    public static void SaveLogin(string username, string _password)
+    {
+        //append: true makes it possibly for us to add to the file without writing over anything
+        using (StreamWriter writer = new StreamWriter(FilePath, append: true))
+        {
+            writer.WriteLine($"{username}; {_password}");     //writer.writeline only writes to userdata.txt not in the console
         }
     }
-    //method to save user login data, as a static void so that we can implement it easier in our code
-    public static void ReadLogin()
+    //method to read all the users from the file
+    public static List<User> ReadLogin()
     {
-        try
+        List<User> users = new List<User>();
+
+        //if the file doesn't exist return an empty list
+        if (!File.Exists(FilePath))
+            return users;
+
+        //reads the file one row in a time
+        using (StreamReader reader = new StreamReader("userdata.txt")) //instans of new streamreader
         {
-            using (StreamReader sr = new StreamReader("userdata.txt")) //instans of new streamreader
+            string? line;
+            while ((line = reader.ReadLine()) != null) //while the user input is not empty
             {
-                string line;
-                while ((line = sr.ReadLine()) != null) //while the user input is not empty
+                string[] parts = line.Split(';'); //splits the line in to two parts
+                if (parts.Length >= 2)
                 {
-                    Console.WriteLine(line); //writes in the data in the file
+
+                    string username = parts[0].Trim();
+                    string _password = parts[1].Trim();
+
+                    if (string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(_password))
+                    {
+                        User user = new User(username, _password);
+                        users.Add(user);
+                    }
                 }
             }
         }
-        catch (Exception e) //if something goes wrong, shows error message.
-        {
-            Console.WriteLine("The file could not be read");
-            Console.WriteLine(e.Message);
-        }
+        return users;
+
     }
 }
 
