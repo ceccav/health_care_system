@@ -11,7 +11,7 @@ while (loginmenu)
     Console.WriteLine("1. Register as a patient");
     Console.WriteLine("2. Log in");
     Console.WriteLine("3. Quit");
-    string option = Console.ReadLine();
+    string? option = Console.ReadLine();
 
     switch (option)
     {

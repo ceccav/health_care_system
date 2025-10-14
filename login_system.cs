@@ -65,14 +65,16 @@ public static class Login_System
 
             }
 
-            if (loggedIn && currentUser != null)
-            {
-                  Console.WriteLine($"Welcome, {currentUser.Username}!");
-            }
-            else
-            {
-                  Console.WriteLine("Wrong username or password.");
-            }
+
+            //ERROR MESSAGE COMES TWO TIMES, WICH ONE DO WE WANT?
+            // if (loggedIn && currentUser != null)
+            // {
+            //       Console.WriteLine($"Welcome, {currentUser.Username}!");
+            // }
+            // else
+            // {
+            //       Console.WriteLine("Wrong username or password.");
+            // }
 
 
       }
