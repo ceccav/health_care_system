@@ -1,9 +1,9 @@
 namespace App;
 
-class User
+public class User
 {
     public string Username;
-    string Password;
+    private string Password;
 
     public User(string username, string password)
     {
