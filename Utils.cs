@@ -21,7 +21,7 @@ public static class Utils
         }
     }
     //method to read all the users from the file
-    public static List<User> ReadLogin()
+    public static List<User> ReadLogins()
     {
         List<User> users = new List<User>();
 
