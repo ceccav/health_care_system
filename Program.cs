@@ -52,11 +52,7 @@ while (loginmenu)
             Console.Write(" Enter your password: ");
             string? loginPassword = Console.ReadLine();
 
-            if (loginUser == superAdminUsername && loginPassword == superAdminPassword)
-            {
-                Console.WriteLine("SuperAdmin logged in successfully!");
 
-            }
 
             bool loggedIn = false;
             User currentUser = null;
