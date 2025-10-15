@@ -49,7 +49,7 @@ while (loginmenu)
             Console.Write("Enter your username: ");
             string? loginUser = Console.ReadLine();
 
-            Console.Write(" Enter your password: ");
+            Console.Write("Enter your password: ");
             string? loginPassword = Console.ReadLine();
 
 
