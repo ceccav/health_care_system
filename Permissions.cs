@@ -11,7 +11,7 @@ public class AdminPermissions       //sets all to false by default
     private bool _canViewListOfPermissions = false;     // superadmin, admin 
     private bool _canAcceptUserRegistrations = false;   //superadmin, admin
 
-
+    private bool_
 
 
 
