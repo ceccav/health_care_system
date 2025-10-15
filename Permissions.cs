@@ -2,9 +2,15 @@ namespace App;
 
 public class AdminPermissions       //sets all to false by default
 {
-    private bool _canManagePermissions = false;
-    private bool _canAssignRegions = false;
-    private bool _canHandleRegistrations = false;
+    private bool _canManagePermissions = false;     // superadmin, admin
+    private bool _canAssignRegions = false;         // superadmin, admin
+    private bool _canHandleRegistrations = false;   // superadmin, admin
+    private bool _canAddLocations = false;          // superadmin, admin
+    private bool __canCreateAccounts = false;       // superadmin, admin
+
+    private bool _canViewListOfPermissions = false;     // superadmin, admin 
+    private bool _canAcceptUserRegistrations = false;   //superadmin, admin
+
 
 
 
