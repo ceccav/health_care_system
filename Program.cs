@@ -13,6 +13,11 @@ users = Save_System.ReadLogins();
 
 while (running)
 {
+    Console.WriteLine("Select an option");
+    Console.WriteLine("1. Register as a patient");
+    Console.WriteLine("2. Log in");
+    Console.WriteLine("3. Quit");
+    string? option = Console.ReadLine();
 
     if (active_user == null)
     {
@@ -53,6 +58,8 @@ while (running)
                 //save user to the file
                 Save_System.SaveLogin(newusername, _newpassword);
                 Console.WriteLine("Your account have been created");
+            Console.Write("Enter your password: ");
+            string? loginPassword = Console.ReadLine();
 
                 break;
             case "2":
