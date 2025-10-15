@@ -1,9 +1,9 @@
 ﻿using App;
 
-public static List<User> users = new List<User>();
+List<User> users = new List<User>();
 bool loginmenu = true;
 //Reads in all users from data/users.txt
-users = Utils.ReadLogins();
+users = Save_System.ReadLogins();
 
 while (loginmenu)
 {
