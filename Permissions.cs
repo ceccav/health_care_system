@@ -1,6 +1,6 @@
 namespace App;
 
-public class AdminPermissions       //sets all to false by default
+class AdminPermissions       //sets all to false by default
 {
     private bool _canManagePermissions = false;     // superadmin, admin
     private bool _canAssignRegions = false;         // superadmin, admin
