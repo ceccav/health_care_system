@@ -16,7 +16,7 @@ while (loginmenu)
     switch (option)
     {
         case "1":
-            Console.Write("Enter your username: ");
+            Console.Write("Enter your username ");
             string? newusername = Console.ReadLine();
 
             Console.Write("Enter your password : ");
@@ -75,6 +75,8 @@ while (loginmenu)
             loginmenu = false;
             break;
     }
+
+
 }
 
 
