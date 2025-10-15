@@ -5,6 +5,11 @@ public static class Login_System
       //List holding all users in the memory
       public static List<User> users = new List<User>();
 
+      public static List<AdminUser> admins = new List<AdminUser>();
+
+      private static string superAdminUsername = "superadmin";
+      private static string superAdminPassword = "123";
+
       public static void Init()
       {
             users = Utils.ReadLogins();
@@ -48,6 +53,12 @@ public static class Login_System
 
             Console.Write(" Enter your password: ");
             string? loginPassword = Console.ReadLine();
+
+            if(loginUser == superAdminUsername && loginPassword == superAdminPassword)
+        {
+                  Console.WriteLine("SuperAdmin logged in successfully!");
+                  
+        }
 
             bool loggedIn = false;
             User currentUser = null;
