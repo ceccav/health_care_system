@@ -7,7 +7,7 @@ users = Utils.ReadLogins();
 
 while (loginmenu)
 {
-    Console.WriteLine("Select a option");
+    Console.WriteLine("Select an option");
     Console.WriteLine("1. Register as a patient");
     Console.WriteLine("2. Log in");
     Console.WriteLine("3. Quit");
