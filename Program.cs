@@ -115,6 +115,11 @@ while (running)
         {
 
         }
+
+        if (active_user.IsAllowed(App.Permissions.AddLocations))
+            {
+                  
+            }
     }
 
 
