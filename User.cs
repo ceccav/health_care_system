@@ -18,7 +18,7 @@ class User
         return username == Username && password == Password;
     }
 
-    public bool IsAllowed(Permission permission)
+    public bool IsAllowed(Permissions permission)
     {
         return Permissions.Contains(permission);
     }
