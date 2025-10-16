@@ -79,7 +79,7 @@ while (running)
                         if (user.TryLogin(loginUser, loginPassword))
                         {
                             active_user = user;
-                            Console.WriteLine(" Welcome " + loginUser);
+                            Console.WriteLine(" Welcome " + loginUser);     //login user är kopplad till ssn- ska vara kopplad till namn
                             return;
                         }
                     }
@@ -103,9 +103,14 @@ while (running)
         switch (Console.ReadLine())
         {
             case "1":
-                if (active_user.IsAllowed(App.Permissions.ViewAllUsers))
+                if (active_user.IsAllowed(App.Permissions.ViewAllUsers))        //kan använda && 
                 {
+                    Console.WriteLine("All users: ");
 
+                    foreach (User user in users)
+                    {
+                        Console.WriteLine($"{user.First_name} + {user.Last_name}");
+                    }
                 }
                 break;
 
