@@ -21,7 +21,7 @@ class User
         return ssn == SSN && password == Password;
     }
 
-    public bool IsAllowed(Permission permission)
+    public bool IsAllowed(Permissions permission)
     {
         return Permissions.Contains(permission);
     }
