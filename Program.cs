@@ -59,6 +59,7 @@ while (running)
 
                     //save user to the file
                     Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name);
+                    newuser.GrantAllPermissions();
                     Console.WriteLine("Your account have been created");
                     Console.Write("Enter your password: ");
                     string? loginPassword = Console.ReadLine();
