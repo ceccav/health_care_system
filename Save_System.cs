@@ -16,7 +16,7 @@ static class Save_System
         //append: true makes it possibly for us to add to the file without writing over anything
         using (StreamWriter writer = new StreamWriter(FilePath, append: true))
         {
-            writer.WriteLine($"{ssn}; {first_name}; {last_name}; {_password}");     //writer.writeline only writes to userdata.txt not in the console
+            writer.WriteLine($"{ssn}; {_password}; {first_name}; {last_name}");     //writer.writeline only writes to userdata.txt not in the console
         }
     }
     //method to read all the users from the file

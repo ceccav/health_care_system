@@ -65,11 +65,15 @@ while (running)
                 break;
             case "2":
                 {
+                    users = Save_System.ReadLogins();
+
                     Console.Write("Enter your SSN: ");
                     string? loginSSN = Console.ReadLine();
 
                     Console.Write(" Enter your password: ");
                     string? loginPassword = Console.ReadLine();
+
+                    bool loggedin = false;
 
 
                     //check if the user is in the list
@@ -80,8 +84,14 @@ while (running)
                             user.GrantAllPermissions();
                             active_user = user;
                             Console.WriteLine($"Welcome {user.First_name} {user.Last_name}");
-                            break;
+                            loggedin = true;
+                            continue;
                         }
+                    }
+
+                    if(!loggedin)
+                    {
+                        Console.WriteLine("Invalid SSN or password");
                     }
                 }
                 break;
@@ -98,6 +108,10 @@ while (running)
         {
             Console.WriteLine("[1] - View all users");
         }
+        if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
+        {
+            Console.WriteLine("[4] - Create account for personnel");
+        }
 
 
         switch (Console.ReadLine())
@@ -113,6 +127,47 @@ while (running)
                     }
                 }
                 break;
+
+            case "4":
+                if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
+                {
+                    Console.Write("Enter the SSN of the personell: ");
+                    string? newssn = Console.ReadLine();
+
+                    Console.Write("Enter the password to the personell: ");
+                    string? _newpassword = Console.ReadLine();
+
+                    Console.Write("Enter the first name of the personell: ");
+                    string? newfirst_name = Console.ReadLine();
+
+                    Console.Write("Enter the last name of the personell: ");
+                    string? newlast_name = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name))
+                    {
+                        Console.WriteLine("SSN, first name, last name and password cannot be empty!");
+                        return;
+                    }
+
+                    //Controls if the username already exists
+                    bool userExists = users.Exists(u => u.SSN.Equals(newssn, StringComparison.OrdinalIgnoreCase));
+                    if (userExists)
+                    {
+                        Console.WriteLine("That SSN is already taken.");
+                        return;
+                    }
+
+                    //create new user and add to the list
+                    User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name);
+                    users.Add(newuser);
+
+                    //save user to the file
+                    Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name);
+                    Console.WriteLine("The account have been created");
+                }
+                break;
+                    
+                
 
                 //add code
         }
