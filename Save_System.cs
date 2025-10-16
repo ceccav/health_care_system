@@ -35,7 +35,7 @@ static class Save_System
             while ((line = reader.ReadLine()) != null) //while the user input is not empty
             {
                 string[] parts = line.Split(';'); //splits the line in to two parts
-                if (parts.Length >= 2)
+                if (parts.Length >= 4)
                 {
 
                     string ssn = parts[0].Trim();
