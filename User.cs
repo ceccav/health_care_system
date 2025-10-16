@@ -1,3 +1,7 @@
+using System.Security;
+using System;
+
+
 namespace App;
 
 class User
@@ -25,6 +29,16 @@ class User
     {
         return Permissions.Contains(permission);
     }
+
+    public void GrantAllPermissions()
+    {
+        this.Permissions.Clear();
+        foreach (App.Permissions currentPermission in Enum.GetValues<App.Permissions>())
+        {
+            this.Permissions.Add(currentPermission);
+        }
+    }
+
 }
 
 public enum Role

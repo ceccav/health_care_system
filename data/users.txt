@@ -4,3 +4,5 @@ admin; admin
 123456789; måns; oskarsson; 123
 147; måns; oskarsson; 258
 789; 456; måns; oskarsson
+567; Jolle; Bolle; 123
+000; joel; bulle; 123
