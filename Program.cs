@@ -59,9 +59,8 @@ while (running)
 
                     //save user to the file
                     Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name);
-                    newuser.GrantAllPermissions();
                     Console.WriteLine("Your account have been created");
-                    
+
                 }
                 break;
             case "2":
@@ -78,9 +77,10 @@ while (running)
                     {
                         if (user.TryLogin(loginSSN, loginPassword))
                         {
+                            user.GrantAllPermissions();
                             active_user = user;
                             Console.WriteLine($"Welcome {user.First_name} {user.Last_name}");
-                            return;
+                            break;
                         }
                     }
                 }
