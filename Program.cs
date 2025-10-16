@@ -61,14 +61,13 @@ while (running)
                     Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name);
                     newuser.GrantAllPermissions();
                     Console.WriteLine("Your account have been created");
-                    Console.Write("Enter your password: ");
-                    string? loginPassword = Console.ReadLine();
+                    
                 }
                 break;
             case "2":
                 {
                     Console.Write("Enter your SSN: ");
-                    string? loginUser = Console.ReadLine();
+                    string? loginSSN = Console.ReadLine();
 
                     Console.Write(" Enter your password: ");
                     string? loginPassword = Console.ReadLine();
@@ -77,10 +76,10 @@ while (running)
                     //check if the user is in the list
                     foreach (User user in users)
                     {
-                        if (user.TryLogin(loginUser, loginPassword))
+                        if (user.TryLogin(loginSSN, loginPassword))
                         {
                             active_user = user;
-                            Console.WriteLine(" Welcome " + loginUser);     //login user är kopplad till ssn- ska vara kopplad till namn
+                            Console.WriteLine($"Welcome {user.First_name} {user.Last_name}");
                             return;
                         }
                     }
