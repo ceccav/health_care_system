@@ -27,32 +27,38 @@ while (running)
             case "1":
                 {
 
-                    Console.Write("Enter your username: ");
-                    string? newusername = Console.ReadLine();
+                    Console.Write("Enter your SSN: ");
+                    string? newssn = Console.ReadLine();
 
-                    Console.Write("Enter your password : ");
+                    Console.Write("Enter your password: ");
                     string? _newpassword = Console.ReadLine();
 
-                    if (string.IsNullOrWhiteSpace(newusername) || string.IsNullOrWhiteSpace(_newpassword))
+                    Console.Write("Enter your first name: ");
+                    string? newfirst_name = Console.ReadLine();
+
+                    Console.Write("Enter your last name: ");
+                    string? newlast_name = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name))
                     {
-                        Console.WriteLine("Username and password cannot be empty!");
+                        Console.WriteLine("SSN, first name, last name and password cannot be empty!");
                         return;
                     }
 
                     //Controls if the username already exists
-                    bool userExists = users.Exists(u => u.Username.Equals(newusername, StringComparison.OrdinalIgnoreCase));
+                    bool userExists = users.Exists(u => u.SSN.Equals(newssn, StringComparison.OrdinalIgnoreCase));
                     if (userExists)
                     {
-                        Console.WriteLine("That username is already taken.");
+                        Console.WriteLine("That SSN is already taken.");
                         return;
                     }
 
                     //create new user and add to the list
-                    User newuser = new User(newusername, _newpassword);
+                    User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name);
                     users.Add(newuser);
 
                     //save user to the file
-                    Save_System.SaveLogin(newusername, _newpassword);
+                    Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name);
                     Console.WriteLine("Your account have been created");
                     Console.Write("Enter your password: ");
                     string? loginPassword = Console.ReadLine();
@@ -60,7 +66,7 @@ while (running)
                 break;
             case "2":
                 {
-                    Console.Write("Enter your username: ");
+                    Console.Write("Enter your SSN: ");
                     string? loginUser = Console.ReadLine();
 
                     Console.Write(" Enter your password: ");
