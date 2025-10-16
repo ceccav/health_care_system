@@ -1,3 +1,6 @@
+using System.Security;
+using System;
+
 namespace App;
 
 class User
@@ -25,6 +28,10 @@ class User
     {
         return Permissions.Contains(permission);
     }
+
+
+
+
 }
 
 public enum Role
