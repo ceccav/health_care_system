@@ -105,7 +105,12 @@ while (running)
 
                 //add code
         }
+        if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+        {
+
+        }
     }
+
 
 }
 
