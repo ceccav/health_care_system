@@ -6,3 +6,4 @@ admin; admin
 789; 456; måns; oskarsson
 567; Jolle; Bolle; 123
 000; joel; bulle; 123
+369; 258; måns; oskarsson
