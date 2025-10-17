@@ -108,6 +108,11 @@ while (running)
         {
             Console.WriteLine("[1] - View all users");
         }
+        if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+        {
+            Console.WriteLine("[2] - View my journal");
+            Console.WriteLine("[3] - Book an appointment");
+        }
         if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
         {
             Console.WriteLine("[4] - Create account for personnel");
@@ -129,6 +134,13 @@ while (running)
                     {
                         Console.WriteLine($"{user.First_name} + {user.Last_name}");
                     }
+                }
+                break;
+            case "3":
+                if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+                {
+                    TryClear();
+                    BookAnAppointment();
                 }
                 break;
 
@@ -170,11 +182,6 @@ while (running)
                     Console.WriteLine("The account have been created");
                 }
                 break;
-<<<<<<< HEAD
-
-
-=======
->>>>>>> main
 
             case "9":
                 if (active_user.IsAllowed(App.Permissions.ViewPermissions))
@@ -199,9 +206,6 @@ while (running)
 
     }
 }
-
-
-
 
 void TryClear()
 {
