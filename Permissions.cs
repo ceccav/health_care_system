@@ -2,10 +2,12 @@ namespace App;
 
 public enum Permissions
 {
-    ViewAllUsers,   //joel
+    ViewAllUsers,   //joel - klar
     ViewMyPersonal,     //cecilia, journal, appointments 
     AddLocations,   //samir 
-    CreateAccountPersonnel, //måns
+    CreateAccountPersonnel, //måns 
+
+    ViewPermissions,     //joel 
 
 
 
