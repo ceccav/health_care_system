@@ -172,13 +172,8 @@ while (running)
                 }
                 break;
 
-<<<<<<< HEAD
             case "9":       //active user is allowed to view all users and their permissions
                 if (active_user.IsAllowed(App.Permissions.ViewPermissions))     //if the user is allowed
-=======
-            case "9":
-                if (active_user.IsAllowed(App.Permissions.ViewPermissions))
->>>>>>> main
                 {
                     Console.WriteLine("All users and their permissions: ");
 
