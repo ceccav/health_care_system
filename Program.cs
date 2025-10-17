@@ -221,6 +221,8 @@ void TryClear()
     try { Console.Clear(); } catch { }
 }
 
+//This is the code everyone should have
+
 
 
 
