@@ -15,3 +15,7 @@ hej; tjena; måns; oskarsson; Patient
 9999; 6666; rut; karlsson; Admin
 öööö; åååå; patrick; nilsson; Admin
 oooo; iiii; tim; olsson; Admin
+888; 888; jolle; bolle
+666; 666; j000lle; b00llee
+222; 222; 22; 22
+5656; 1212; Test; Test

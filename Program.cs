@@ -2,10 +2,10 @@
 using System.Runtime.CompilerServices;
 using System.Security;
 using App;
-
-List<User> users = new List<User>();
+App.EventHandler eventHandler = new(); // instansiates the eventhandler class
+List<User> users = new List<User>(); //List for all the users
 bool running = true;
-User? active_user = null;
+User? active_user = null; //active user set to null when the program starts
 //Reads in all users from data/users.txt
 users = Save_System.ReadLogins();
 
@@ -91,7 +91,7 @@ while (running)
                         }
                     }
 
-                    if(!loggedin)
+                    if (!loggedin)
                     {
                         Console.WriteLine("Invalid SSN or password");
                     }
@@ -114,19 +114,24 @@ while (running)
         {
             Console.WriteLine("[4] - Create account for personnel");
         }
+        if (active_user.IsAllowed(App.Permissions.ViewPermissions))
+        {
+            Console.WriteLine("[9] - View users and their permissions");
+        }
 
 
         switch (Console.ReadLine())
         {
-            case "1":
+            case "1":       //if the user is allowed to view all users, show every user
                 if (active_user.IsAllowed(App.Permissions.ViewAllUsers))        //kan använda && 
                 {
                     Console.WriteLine("All users: ");
 
-                    foreach (User user in users)
+                    foreach (User user in users)        //for every user in my user list
                     {
-                        Console.WriteLine($"{user.First_name} + {user.Last_name}");
+                        Console.WriteLine($"{user.First_name} {user.Last_name}");       //show every user
                     }
+                    Console.ReadLine();
                 }
                 break;
 
@@ -182,19 +187,34 @@ while (running)
                     Console.ReadLine();
                 }
                 break;
-                    
-                
 
-                //add code
-        }
-        if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
-        {
+            case "9":       //active user is allowed to view all users and their permissions
+                if (active_user.IsAllowed(App.Permissions.ViewPermissions))     //if the user is allowed
+                {
+                    Console.WriteLine("All users and their permissions: ");
 
+                    foreach (User user in users)        //run through the list of users and show them, + their permissions
+                    {
+                        Console.WriteLine($"{user.First_name} {user.Last_name} {string.Join(", ", user.Permissions)}");
+                    }
+                    Console.ReadLine();
+                }
+                break;
         }
+
+
+
+
+        //add code
+        // }
+        // if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+        // {
+
     }
-
-
 }
+
+
+
 
 void TryClear()
 {
