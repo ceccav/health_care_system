@@ -10,7 +10,7 @@ class User
     string Password;
     public string First_name;
     public string Last_name;
-    List<Permissions> Permissions = new();
+    public List<Permissions> Permissions = new();
 
     public User(string ssn, string password, string first_name, string last_name)
     {

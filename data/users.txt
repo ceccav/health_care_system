@@ -7,3 +7,7 @@ admin; admin
 567; Jolle; Bolle; 123
 000; joel; bulle; 123
 369; 258; måns; oskarsson
+888; 888; jolle; bolle
+666; 666; j000lle; b00llee
+222; 222; 22; 22
+5656; 1212; Test; Test

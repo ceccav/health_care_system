@@ -89,7 +89,7 @@ while (running)
                         }
                     }
 
-                    if(!loggedin)
+                    if (!loggedin)
                     {
                         Console.WriteLine("Invalid SSN or password");
                     }
@@ -111,6 +111,10 @@ while (running)
         if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
         {
             Console.WriteLine("[4] - Create account for personnel");
+        }
+        if (active_user.IsAllowed(App.Permissions.ViewPermissions))
+        {
+            Console.WriteLine("[9] - View users and their permissions");
         }
 
 
@@ -166,19 +170,33 @@ while (running)
                     Console.WriteLine("The account have been created");
                 }
                 break;
-                    
-                
 
-                //add code
-        }
-        if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
-        {
+            case "9":
+                if (active_user.IsAllowed(App.Permissions.ViewPermissions))
+                {
+                    Console.WriteLine("All users and their permissions: ");
 
+                    foreach (User user in users)
+                    {
+                        Console.WriteLine($"{user.First_name} {user.Last_name} {string.Join(", ", user.Permissions)}");
+                    }
+                }
+                break;
         }
+
+
+
+
+        //add code
+        // }
+        // if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+        // {
+
     }
-
-
 }
+
+
+
 
 void TryClear()
 {
