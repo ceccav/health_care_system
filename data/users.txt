@@ -7,3 +7,11 @@ admin; admin
 567; Jolle; Bolle; 123
 000; joel; bulle; 123
 369; 258; måns; oskarsson
+hej; tjena; måns; oskarsson; Patient
+0000; 1111; kian; lind; Admin
+2222; 3333; ulf; joli; Nurse
+7777; 8888; johan; persson; Doctor
+4444; 5555; yngve; lundell; Doctor
+9999; 6666; rut; karlsson; Admin
+öööö; åååå; patrick; nilsson; Admin
+oooo; iiii; tim; olsson; Admin
