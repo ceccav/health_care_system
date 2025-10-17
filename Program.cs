@@ -170,11 +170,6 @@ while (running)
                     Console.WriteLine("The account have been created");
                 }
                 break;
-<<<<<<< HEAD
-
-
-=======
->>>>>>> main
 
             case "9":
                 if (active_user.IsAllowed(App.Permissions.ViewPermissions))
