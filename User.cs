@@ -10,14 +10,16 @@ class User
     string Password;
     public string First_name;
     public string Last_name;
+    public Role Role;
     public List<Permissions> Permissions = new();
 
-    public User(string ssn, string password, string first_name, string last_name)
+    public User(string ssn, string password, string first_name, string last_name, Role role)
     {
         SSN = ssn;
         Password = password;
         First_name = first_name;
         Last_name = last_name;
+        Role = role;
     }
 
     public bool TryLogin(string ssn, string password)
@@ -46,5 +48,6 @@ public enum Role
     SuperAdmin,
     Admin,
     Doctor,
-    Patient
+    Patient,
+    Nurse,
 }
