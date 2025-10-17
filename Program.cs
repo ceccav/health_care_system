@@ -120,15 +120,16 @@ while (running)
 
         switch (Console.ReadLine())
         {
-            case "1":
+            case "1":       //if the user is allowed to view all users, show every user
                 if (active_user.IsAllowed(App.Permissions.ViewAllUsers))        //kan använda && 
                 {
                     Console.WriteLine("All users: ");
 
-                    foreach (User user in users)
+                    foreach (User user in users)        //for every user in my user list
                     {
-                        Console.WriteLine($"{user.First_name} + {user.Last_name}");
+                        Console.WriteLine($"{user.First_name} {user.Last_name}");       //show every user
                     }
+                    Console.ReadLine();
                 }
                 break;
 
@@ -170,21 +171,17 @@ while (running)
                     Console.WriteLine("The account have been created");
                 }
                 break;
-<<<<<<< HEAD
 
-
-=======
->>>>>>> main
-
-            case "9":
-                if (active_user.IsAllowed(App.Permissions.ViewPermissions))
+            case "9":       //active user is allowed to view all users and their permissions
+                if (active_user.IsAllowed(App.Permissions.ViewPermissions))     //if the user is allowed
                 {
                     Console.WriteLine("All users and their permissions: ");
 
-                    foreach (User user in users)
+                    foreach (User user in users)        //run through the list of users and show them, + their permissions
                     {
                         Console.WriteLine($"{user.First_name} {user.Last_name} {string.Join(", ", user.Permissions)}");
                     }
+                    Console.ReadLine();
                 }
                 break;
         }
