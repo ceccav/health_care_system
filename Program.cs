@@ -2,10 +2,10 @@
 using System.Runtime.CompilerServices;
 using System.Security;
 using App;
-
-List<User> users = new List<User>();
+App.EventHandler eventHandler = new(); // instansiates the eventhandler class
+List<User> users = new List<User>(); //List for all the users
 bool running = true;
-User? active_user = null;
+User? active_user = null; //active user set to null when the program starts
 //Reads in all users from data/users.txt
 users = Save_System.ReadLogins();
 
@@ -170,6 +170,11 @@ while (running)
                     Console.WriteLine("The account have been created");
                 }
                 break;
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> main
 
             case "9":
                 if (active_user.IsAllowed(App.Permissions.ViewPermissions))
