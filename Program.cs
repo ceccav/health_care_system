@@ -52,14 +52,16 @@ while (running)
                         Console.WriteLine("That SSN is already taken.");
                         return;
                     }
+                    //gives created account for patient the role patient
+                    Role role = Role.Patient;
 
                     //create new user and add to the list
-                    User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name);
+                    User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name, role);
                     users.Add(newuser);
 
                     //save user to the file
-                    Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name);
-                    Console.WriteLine("Your account have been created");
+                    Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name, role);
+                    Console.WriteLine("You have registrerd as a patient successfully.");
 
                 }
                 break;
@@ -148,27 +150,43 @@ while (running)
                     Console.Write("Enter the last name of the personell: ");
                     string? newlast_name = Console.ReadLine();
 
-                    if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name))
+                    Console.WriteLine("Choose a role for the personnel (Admin, Doctor, Nurse): ");
+                    string? roleInput = Console.ReadLine();
+
+                    if (!Enum.TryParse(roleInput, true, out Role role) || (role != Role.Admin && role != Role.Doctor && role != Role.Nurse)) // controls if input is one of the existing roles
                     {
-                        Console.WriteLine("SSN, first name, last name and password cannot be empty!");
-                        return;
+                        Console.WriteLine("Invalid role. Please enter Admin, Doctor or Nurse.");
+                        break;
                     }
+
+                    if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name)) // controls so that input isn't empty
+
+                        if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name))
+                        {
+                            Console.WriteLine("SSN, first name, last name and password cannot be empty!");
+                            break;
+                        }
 
                     //Controls if the username already exists
                     bool userExists = users.Exists(u => u.SSN.Equals(newssn, StringComparison.OrdinalIgnoreCase));
                     if (userExists)
                     {
                         Console.WriteLine("That SSN is already taken.");
-                        return;
                     }
+                    else
+                    {
 
-                    //create new user and add to the list
-                    User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name);
-                    users.Add(newuser);
+                        //create new user and add to the list
+                        User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name, role);
+                        users.Add(newuser);
 
-                    //save user to the file
-                    Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name);
-                    Console.WriteLine("The account have been created");
+                        //save user to the file
+                        Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name, role);
+                        Console.WriteLine($"The {role} account has been created");
+                    }
+                    Console.ReadLine();
+                    Console.WriteLine("Press enter to continue");
+                    Console.ReadLine();
                 }
                 break;
 
