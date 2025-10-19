@@ -2,7 +2,17 @@
 using System.Runtime.CompilerServices;
 using System.Security;
 using App;
-App.EventHandler eventHandler = new(); // instansiates the eventhandler class
+EventManager eventManager = new(); // instansiates the eventhandler class
+
+//prenumate on the event
+Action<string, DateTime> bookingHandler = (string name, DateTime time) =>
+{
+    Console.WriteLine("TESTING PRENUMERATION");
+};
+
+//Add prenumeration
+EventManager.AppointmentBooked += bookingHandler;
+
 List<User> users = new List<User>(); //List for all the users
 bool running = true;
 User? active_user = null; //active user set to null when the program starts
@@ -97,6 +107,9 @@ while (running)
                 break;
             case "3":
                 running = false;
+
+                //unsubscribes from Appointment event.
+                EventManager.AppointmentBooked -= bookingHandler;
                 break;
         }
     }
@@ -140,7 +153,44 @@ while (running)
                 if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
                 {
                     TryClear();
-                    Boo
+                    Console.WriteLine("=== Book an appointment ===");
+
+                    Console.Write("Enter Date (YYYY-MM-DD): ");
+                    string? dateInput = Console.ReadLine();
+
+                    Console.Write("Enter time (HH:mm): ");
+                    string? timeInput = Console.ReadLine();
+
+                    DateTime datePart;
+                    DateTime timePart;
+
+                    //controls if the date is a valid date
+                    if (!DateTime.TryParse(dateInput, out datePart))
+                    {
+                        Console.WriteLine("Not a valid date.");
+                        break;
+                    }
+
+                    //controls if the user entered a valid time
+                    if (!DateTime.TryParse(timeInput, out timePart))
+                    {
+                        Console.WriteLine("Not valid time.");
+                        break;
+                    }
+
+                    //combines date and time to a completed value. .Date and .TimeOfDay shows only the date and the time isntead of the full year and so on.
+                    DateTime startTime = datePart.Date + timePart.TimeOfDay;
+
+                    //create patiens fullname for printOut in the console and storage
+                    string fullName = active_user.First_name + " " + active_user.Last_name;
+
+                    //Create the booking by calling the eventmanager
+                    Appointment appointment = eventManager.BookAppointment(fullName, startTime);
+
+                    Console.WriteLine();
+                    Console.WriteLine("Press Enter to go back to menu");
+                    Console.ReadLine();
+
                 }
                 break;
 
