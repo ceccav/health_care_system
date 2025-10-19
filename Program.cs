@@ -140,7 +140,7 @@ while (running)
                 if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
                 {
                     TryClear();
-                    BookAnAppointment();
+                    Boo
                 }
                 break;
 
