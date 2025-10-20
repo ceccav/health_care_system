@@ -125,7 +125,7 @@ while (running)
         }
         if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
         {
-            Console.WriteLine("[2] - View my journal");
+            Console.WriteLine("[5] - View my journal");
             Console.WriteLine("[3] - Book an appointment");
         }
         if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
@@ -252,6 +252,13 @@ while (running)
                 }
                 break;
 
+            case "5":
+                if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+                {
+                    ViewAppointment();
+                }
+                break;
+
             case "9":       //active user is allowed to view all users and their permissions
                 if (active_user.IsAllowed(App.Permissions.ViewPermissions))     //if the user is allowed
                 {
@@ -275,6 +282,8 @@ while (running)
         // {
 
     }
+
+    //test
 }
 
 void TryClear()
@@ -282,7 +291,11 @@ void TryClear()
     try { Console.Clear(); } catch { }
 }
 
-//This is the code everyone should have
+void ViewAppointment()
+{
+    TryClear();
+
+}
 
 
 
