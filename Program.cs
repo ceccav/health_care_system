@@ -125,7 +125,7 @@ while (running)
         }
         if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
         {
-            Console.WriteLine("[2] - View my journal");
+            Console.WriteLine("[5] - View my journal");
             Console.WriteLine("[3] - Book an appointment");
         }
         if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
@@ -136,6 +136,27 @@ while (running)
         {
             Console.WriteLine("[9] - View users and their permissions");
         }
+           if (active_user.IsAllowed(App.Permissions.AddLocations))
+        {
+            Console.WriteLine("==Lägg till sjukhus==");
+            List<string> sjukhusLista = new();
+            Console.WriteLine("Län : Skåne, Stockholm, Blekinge");
+            Console.WriteLine("Ange namn på vårdcentral: ");
+            string vårdcentral = Console.ReadLine();
+            Console.WriteLine("Ange län: ");
+            string län = Console.ReadLine();
+
+            sjukhusLista.Add(vårdcentral + " (" + län + ")");
+
+            Console.WriteLine("Du har lagt till: " + vårdcentral + " i " + län);
+            Console.WriteLine("Aktuella platser: ");
+
+            foreach (string s in sjukhusLista)
+            {
+                Console.WriteLine("- " + s);
+            }
+        }
+
 
 
         switch (Console.ReadLine())
@@ -197,39 +218,93 @@ while (running)
                 }
                 break;
 
-                //add code
+            case "4":
+                if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
+                {
+                    Console.Write("Enter the SSN of the personell: ");
+                    string? newssn = Console.ReadLine();
+
+                    Console.Write("Enter the password to the personell: ");
+                    string? _newpassword = Console.ReadLine();
+
+                    Console.Write("Enter the first name of the personell: ");
+                    string? newfirst_name = Console.ReadLine();
+
+                    Console.Write("Enter the last name of the personell: ");
+                    string? newlast_name = Console.ReadLine();
+
+                    Console.WriteLine("Choose a role for the personnel (Admin, Doctor, Nurse): ");
+                    string? roleInput = Console.ReadLine();
+
+                    if (!Enum.TryParse(roleInput, true, out Role role) || (role != Role.Admin && role != Role.Doctor && role != Role.Nurse)) // controls if input is one of the existing roles
+                    {
+                        Console.WriteLine("Invalid role. Please enter Admin, Doctor or Nurse.");
+                        break;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name)) // controls so that input isn't empty
+
+                        if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name))
+                        {
+                            Console.WriteLine("SSN, first name, last name and password cannot be empty!");
+                            break;
+                        }
+
+                    //Controls if the username already exists
+                    bool userExists = users.Exists(u => u.SSN.Equals(newssn, StringComparison.OrdinalIgnoreCase));
+                    if (userExists)
+                    {
+                        Console.WriteLine("That SSN is already taken.");
+                    }
+                    else
+                    {
+
+                        //create new user and add to the list
+                        User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name, role);
+                        users.Add(newuser);
+
+                        //save user to the file
+                        Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name, role);
+                        Console.WriteLine($"The {role} account has been created");
+                    }
+                    Console.ReadLine();
+                    Console.WriteLine("Press enter to continue");
+                    Console.ReadLine();
+                }
+                break;
+
+            case "5":
+                if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+                {
+                    ViewAppointment();
+                }
+                break;
+
+            case "9":       //active user is allowed to view all users and their permissions
+                if (active_user.IsAllowed(App.Permissions.ViewPermissions))     //if the user is allowed
+                {
+                    Console.WriteLine("All users and their permissions: ");
+
+                    foreach (User user in users)        //run through the list of users and show them, + their permissions
+                    {
+                        Console.WriteLine($"{user.First_name} {user.Last_name} {string.Join(", ", user.Permissions)}");
+                    }
+                    Console.ReadLine();
+                }
+                break;
         }
-        if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
-        {
 
-        }
 
-        if (active_user.IsAllowed(App.Permissions.AddLocations))
-            
-                     
-        {
-            Console.WriteLine("==Add Hospital==");
-            List<string> hospitalList = new();
-            Console.WriteLine("County : Skåne, Stockholm, Blekinge");
-            Console.WriteLine("Add name of health center : ");
-            string healtcenter = Console.ReadLine();
-            Console.WriteLine("Ange län: ");
-            string county = Console.ReadLine();
 
-            hospitalList.Add(healtcenter + " (" + län + ")");
 
-            Console.WriteLine("Du har lagt till: " + healtcenter + " i " + county);
-            Console.WriteLine("Aktuella platser: ");
+        //add code
+        // }
+        // if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+        // {
 
-            foreach (string s in hospitalList)
-            {
-                Console.WriteLine("- " + s);
-            }
-        }
-            
     }
 
-
+    //test
 }
 
 void TryClear()
@@ -237,7 +312,11 @@ void TryClear()
     try { Console.Clear(); } catch { }
 }
 
-//This is the code everyone should have
+void ViewAppointment()
+{
+    TryClear();
+
+}
 
 
 
