@@ -3,9 +3,6 @@ namespace App;
 // Event to book an appointment is added
 class EventManager
 {
-    //When a booking is made it will trigger this event
-    public static event Action<string, DateTime>? AppointmentBooked;
-
     //Readonly list holding all of the booked appointments, you can add to it but not change it.
     private readonly List<Appointment> _appointments = new List<Appointment>();
 
@@ -16,13 +13,28 @@ class EventManager
         Appointment appointment = new Appointment(patientName, startTime); // creates new appointment-object
         _appointments.Add(appointment); //adds to the list of all bookings
 
-        //triggers the event ''AppointmentBooked'' if someone is subscribing to it, only runs if it isn't null
-        AppointmentBooked?.Invoke(appointment._patientName, appointment._startTime);
-
-
+        Save_System.SaveAppointment(patientName, startTime);
         Console.WriteLine($"Appointment booked for {appointment._patientName}, on {appointment._startTime.ToString("yyyy-mm-dd HH:mm")}"); //writes out in console
 
+        return appointment;
+    }
+    public List<Appointment> GetAppointmentsFor(string patientName, bool upcomingAppointment)
+    {
+        List<Appointment> matchingAppointments = new List<Appointment>();
+        //if date is today or in the future
+        DateTime today = DateTime.Today;
 
-        return appointment; //returns the booking
+        //find the right appointments
+        foreach (Appointment appointment in _appointments)
+        {
+            //filters out the old bookings, if uppcomingAppointment is true
+            if (appointment._patientName == patientName && (!upcomingAppointment || appointment._startTime.Date >= today))
+            {
+                matchingAppointments.Add(appointment);
+
+            }
+        }
+
+        return matchingAppointments;
     }
 }
