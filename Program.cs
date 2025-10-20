@@ -122,9 +122,28 @@ while (running)
         }
 
         if (active_user.IsAllowed(App.Permissions.AddLocations))
+            
+                     
+        {
+            Console.WriteLine("==Lägg till sjukhus==");
+            List<string> sjukhusLista = new();
+            Console.WriteLine("Län : Skåne, Stockholm, Blekinge");
+            Console.WriteLine("Ange namn på vårdcentral: ");
+            string vårdcentral = Console.ReadLine();
+            Console.WriteLine("Ange län: ");
+            string län = Console.ReadLine();
+
+            sjukhusLista.Add(vårdcentral + " (" + län + ")");
+
+            Console.WriteLine("Du har lagt till: " + vårdcentral + " i " + län);
+            Console.WriteLine("Aktuella platser: ");
+
+            foreach (string s in sjukhusLista)
             {
-                  
+                Console.WriteLine("- " + s);
             }
+        }
+            
     }
 
 
