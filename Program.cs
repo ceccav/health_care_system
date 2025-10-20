@@ -203,8 +203,10 @@ while (running)
         {
 
         }
-            
+
         if (active_user.IsAllowed(App.Permissions.AddLocations))
+            
+                     
         {
             Console.WriteLine("==Lägg till sjukhus==");
             List<string> sjukhusLista = new();
@@ -224,6 +226,7 @@ while (running)
                 Console.WriteLine("- " + s);
             }
         }
+            
     }
 
 
