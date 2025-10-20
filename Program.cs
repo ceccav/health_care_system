@@ -208,20 +208,20 @@ while (running)
             
                      
         {
-            Console.WriteLine("==Lägg till sjukhus==");
-            List<string> sjukhusLista = new();
-            Console.WriteLine("Län : Skåne, Stockholm, Blekinge");
-            Console.WriteLine("Ange namn på vårdcentral: ");
-            string vårdcentral = Console.ReadLine();
+            Console.WriteLine("==Add Hospital==");
+            List<string> hospitalList = new();
+            Console.WriteLine("County : Skåne, Stockholm, Blekinge");
+            Console.WriteLine("Add name of health center : ");
+            string healtcenter = Console.ReadLine();
             Console.WriteLine("Ange län: ");
-            string län = Console.ReadLine();
+            string county = Console.ReadLine();
 
-            sjukhusLista.Add(vårdcentral + " (" + län + ")");
+            hospitalList.Add(healtcenter + " (" + län + ")");
 
-            Console.WriteLine("Du har lagt till: " + vårdcentral + " i " + län);
+            Console.WriteLine("Du har lagt till: " + healtcenter + " i " + county);
             Console.WriteLine("Aktuella platser: ");
 
-            foreach (string s in sjukhusLista)
+            foreach (string s in hospitalList)
             {
                 Console.WriteLine("- " + s);
             }
