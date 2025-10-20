@@ -1,0 +1,1 @@
+Jag ska se till så att när användaren skapas så får den alla permissions just nu inför test av program

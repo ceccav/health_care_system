@@ -1,3 +1,7 @@
+using System.Security;
+using System;
+
+
 namespace App;
 
 class User
@@ -6,14 +10,16 @@ class User
     string Password;
     public string First_name;
     public string Last_name;
-    List<Permissions> Permissions = new();
+    public Role Role;
+    public List<Permissions> Permissions = new();
 
-    public User(string ssn, string password, string first_name, string last_name)
+    public User(string ssn, string password, string first_name, string last_name, Role role)
     {
         SSN = ssn;
         Password = password;
         First_name = first_name;
         Last_name = last_name;
+        Role = role;
     }
 
     public bool TryLogin(string ssn, string password)
@@ -25,6 +31,16 @@ class User
     {
         return Permissions.Contains(permission);
     }
+
+    public void GrantAllPermissions()
+    {
+        this.Permissions.Clear();
+        foreach (App.Permissions currentPermission in Enum.GetValues<App.Permissions>())
+        {
+            this.Permissions.Add(currentPermission);
+        }
+    }
+
 }
 
 public enum Role
@@ -32,5 +48,6 @@ public enum Role
     SuperAdmin,
     Admin,
     Doctor,
-    Patient
+    Patient,
+    Nurse,
 }
