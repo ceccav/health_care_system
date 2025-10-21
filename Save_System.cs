@@ -8,7 +8,7 @@ namespace App;
 static class Save_System
 {
     //searchpath for the file with user data
-    private static readonly string FilePath = Path.Combine("data", "users.txt");
+    private static readonly string UserFilePath = Path.Combine("data", "users.txt");
 
     //searchpatch for appointments
     private static readonly string AppointmentsFilePath = Path.Combine("data", "appointments.txt");
@@ -20,7 +20,7 @@ static class Save_System
     public static void SaveLogin(string ssn, string _password, string first_name, string last_name, Role role)
     {
         //append: true makes it possibly for us to add to the file without writing over anything
-        using (StreamWriter writer = new StreamWriter(FilePath, append: true))
+        using (StreamWriter writer = new StreamWriter(UserFilePath, append: true))
         {
             writer.WriteLine($"{ssn}; {_password}; {first_name}; {last_name}; {role}");     //writer.writeline only writes to userdata.txt not in the console
         }
@@ -31,11 +31,11 @@ static class Save_System
         List<User> users = new List<User>();
 
         //if the file doesn't exist return an empty list
-        if (!File.Exists(FilePath))
+        if (!File.Exists(UserFilePath))
             return users;
 
         //reads the file one row in a time
-        using (StreamReader reader = new StreamReader(FilePath)) //instans of new streamreader
+        using (StreamReader reader = new StreamReader(UserFilePath)) //instans of new streamreader
         {
             string? line;
             while ((line = reader.ReadLine()) != null) //while the user input is not empty
