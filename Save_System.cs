@@ -103,5 +103,14 @@ static class Save_System
         return appointments;
 
     }
+
+    public static void SaveJournal(string patientName, string doctorName, DateTime date, string notes)
+    {
+        Directory.CreateDirectory("data");
+        using (StreamWriter writer = new StreamWriter(JournalsFilePath, append: true))
+        {
+            writer.WriteLine($"{patientName} ; {doctorName} ; {date: yyyy-MM-dd} ; {notes}");
+        }
+    }
 }
 
