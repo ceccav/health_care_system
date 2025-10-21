@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 namespace App;
 
 // Class holding methods to save data
@@ -100,5 +101,60 @@ static class Save_System
         return appointments;
 
     }
+
+
+    private static readonly string LocationsFilePath = Path.Combine("data", "locations.txt");       //a searchpath for locations file 
+
+    public static void SaveLocation(string name, string city, Regions region, string address, string postalcode)        //method to save all locations to file
+    {
+        using (StreamWriter writer = new StreamWriter(LocationsFilePath, append: true))     
+        {
+            writer.WriteLine(name + ", " + city + ", " + region + ", " + address + ", " + postalcode);
+        }
+
+    }
+
+    public static List<Location> ReadLocations()        //method to read all locations from file   
+    {
+        List<Location> locations = new List<Location>();            
+
+        if (!File.Exists(LocationsFilePath))        //if the file doesn't exist
+            return locations;
+
+        using (StreamReader reader = new StreamReader(LocationsFilePath))       //reads the file one row in a time
+
+        {
+            string? line;       
+            while((line = reader.ReadLine()) != null)           //while userinput isn't empty
+            {
+                string[] parts = line.Split(";");       //line gets split into two parts
+                if (parts.Length >= 5)
+                {
+                    string name = parts[0].Trim();
+                    string city = parts[1].Trim();
+                    string regString = parts[2].Trim();
+                    string address = parts[3].Trim();
+                    string postalcode = parts[4].Trim();
+
+                    Regions reg;
+                    if(Enum.TryParse(regString, out reg) && !string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(city) && !string.IsNullOrWhiteSpace(address) && !string.IsNullOrWhiteSpace(postalcode))
+                    {
+                        Location loc = new Location();
+                        loc.Name = name;
+                        loc.City = city;
+                        loc.Region = reg;
+                        loc.Address = address;
+                        loc.PostalCode = postalcode;
+
+                        locations.Add(loc);
+                    }
+                }
+            }
+        }
+        return locations;
+    }
+
+
+
 }
 

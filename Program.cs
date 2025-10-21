@@ -5,6 +5,7 @@ using App;
 EventManager eventManager = new(); // instansiates the eventhandler class
 
 List<User> users = new List<User>(); //List for all the users
+List<Location> locations = new List<Location>(); //List for all locations
 bool running = true;
 User? active_user = null; //active user set to null when the program starts
 //Reads in all users from data/users.txt
@@ -348,6 +349,47 @@ void ViewAppointment(string patientName)
 
     Console.WriteLine("Press ENTER to go back to menu");
     Console.ReadLine();
+}
+
+
+void AddLocation()          //joel
+{
+    TryClear();     
+
+    Console.WriteLine("---Add a location---");
+
+    App.Regions[] regions = (App.Regions[])Enum.GetValues(typeof(App.Regions));         //gets all enums
+    Console.WriteLine("Choose region: ");
+    for (int i = 0; i < regions.Length; i++)            //loops through all regions
+    {
+        Console.WriteLine((i + 1) + regions[i]);        //shows all regions
+    }
+
+    Console.WriteLine("Number: ");
+    string? regionInput = Console.ReadLine();
+    int regionIndex;
+
+    if (!int.TryParse(regionInput, out regionIndex) || regionIndex < 1 || regionIndex > regions.Length) //if its less than 1 or more than number of regions
+    {
+        Console.WriteLine("Not a valid region, press enter to go back to the main menu");
+        Console.ReadLine();
+        return;
+    }
+
+    App.Regions chosenRegion = regions[regionIndex - 1];
+
+    Console.WriteLine("City: "); string? city = Console.ReadLine();
+    Console.WriteLine("Address: "); string? address = Console.ReadLine();
+    Console.WriteLine("Postal code: "); string ? postal = Console.ReadLine();
+    Console.WriteLine("Hospital: "); string? name = Console.ReadLine();
+
+    if (string.IsNullOrWhiteSpace(city) || string.IsNullOrWhiteSpace(address) || string.IsNullOrWhiteSpace(postal) || string.IsNullOrWhiteSpace(name))
+    {
+        Console.WriteLine("City, adress, postal code and name cannot be empty, press enter to return to the main menu");
+        Console.ReadLine();
+        return;
+    }
+
 }
 
 
