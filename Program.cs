@@ -287,6 +287,9 @@ while (running)
                     Console.WriteLine("Region : Skåne, Stockholm, Blekinge ... ");
                     Console.WriteLine("Write the name of the hospital: ");
                     string hospital = Console.ReadLine();
+
+                    Console.WriteLine("Choose a region: ");
+
                     Console.WriteLine("What region is the hospital in?: ");
                     string region = Console.ReadLine();
 
