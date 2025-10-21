@@ -21,3 +21,4 @@ oooo; iiii; tim; olsson; Admin
 5656; 1212; Test; Test
 19961202; 123123; Cecilia; Cavallin
 19961202; 123456789; Cecilia; Cavallin; Patient
+123123; 123; test; joel; Patient

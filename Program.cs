@@ -113,7 +113,7 @@ while (running)
         }
         if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
         {
-            Console.WriteLine("[5] - View my journal");
+            Console.WriteLine("[2] - View my journal");
             Console.WriteLine("[3] - Book an appointment");
         }
         if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
@@ -122,8 +122,14 @@ while (running)
         }
         if (active_user.IsAllowed(App.Permissions.ViewPermissions))
         {
-            Console.WriteLine("[9] - View users and their permissions");
+            Console.WriteLine("[5] - View users and their permissions");
         }
+        if (active_user.IsAllowed(App.Permissions.AddLocations))
+        {
+            Console.WriteLine("[6] - Add hospitals and their locations.");
+        }
+
+
 
 
         switch (Console.ReadLine())
@@ -140,6 +146,19 @@ while (running)
                     Console.ReadLine();
                 }
                 break;
+
+            case "2":
+                if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+                {
+
+
+                    string fullName = active_user.First_name + " " + active_user.Last_name;
+                    ViewAppointment(fullName);
+
+
+                }
+                break;
+
             case "3":
                 if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
                 {
@@ -202,15 +221,7 @@ while (running)
                 }
                 break;
 
-            case "5":
-                if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
-                {
-                    string fullName = active_user.First_name + " " + active_user.Last_name;
-                    ViewAppointment(fullName);
-                }
-                break;
-
-            case "9":       //active user is allowed to view all users and their permissions
+            case "5":       //active user is allowed to view all users and their permissions
                 if (active_user.IsAllowed(App.Permissions.ViewPermissions))     //if the user is allowed
                 {
                     Console.WriteLine("All users and their permissions: ");
@@ -222,9 +233,35 @@ while (running)
                     Console.ReadLine();
                 }
                 break;
+
+            case "6":
+                if (active_user.IsAllowed(App.Permissions.AddLocations))    //if user is allowed to add locations
+                {
+                    Console.WriteLine("---Add a hospital---");
+                    List<string> hospitalList = new();
+                    Console.WriteLine("Region : Skåne, Stockholm, Blekinge ... ");
+                    Console.WriteLine("Write the name of the hospital: ");
+                    string hospital = Console.ReadLine();
+
+                    Console.WriteLine("Choose a region: ");
+
+                    Console.WriteLine("What region is the hospital in?: ");
+                    string region = Console.ReadLine();
+
+                    hospitalList.Add(hospital + " (" + region + ")");
+
+                    Console.WriteLine("You've added : " + hospital + " in " + region);
+
+
+                    foreach (string s in hospitalList)
+                    {
+                        Console.WriteLine("- " + s);
+                    }
+                    Console.ReadLine();
+                }
+                break;
+
         }
-
-
 
 
         //add code
