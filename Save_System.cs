@@ -13,6 +13,9 @@ static class Save_System
     //searchpatch for appointments
     private static readonly string AppointmentsFilePath = Path.Combine("data", "appointments.txt");
 
+    //searchpatch for journals
+    private static readonly string JournalsFilePath = Path.Combine("data", "journals.txt");
+
     //method to save user logindata to file, as a static void so that we can implement it easier in our code
     public static void SaveLogin(string ssn, string _password, string first_name, string last_name, Role role)
     {
