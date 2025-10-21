@@ -12,7 +12,7 @@ public class User
     public string Last_name;
     public Role Role;
     public List<Permissions> Permissions = new();
-    public List<Role> roles = new List<Role> { Role.Patient };
+    public List<Role> roles = new List<Role> { Role.Pending };
     
     
 
@@ -44,6 +44,11 @@ public class User
         }
     }
 
+    public string GetPasswordForSaving()
+    {
+        return Password;
+    }
+
 }
 
 public enum Role
@@ -53,4 +58,5 @@ public enum Role
     Doctor,
     Patient,
     Nurse,
+    Pending,
 }
