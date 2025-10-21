@@ -132,6 +132,10 @@ while (running)
         {
             Console.WriteLine("[4] - Create account for personnel");
         }
+        if (active_user.IsAllowed(App.Permissions.HandleRegistration))
+        {
+            Console.WriteLine("[6] - Handle registrations");
+        }
         if (active_user.IsAllowed(App.Permissions.ViewPermissions))
         {
             Console.WriteLine("[9] - View users and their permissions");
@@ -249,6 +253,81 @@ while (running)
                     Console.ReadLine();
                     Console.WriteLine("Press enter to continue");
                     Console.ReadLine();
+                }
+                break;
+            
+            case "6":
+                if (active_user.IsAllowed(App.Permissions.HandleRegistration))
+                {
+                    Console.WriteLine("All users that want to register: ");
+
+                    List<User> P_users = Save_System.ReadLogins();   // Load all users from file
+
+                    List<User> pendingUsers = new List<User>();  // get all users with role patient
+
+                    foreach (User user in P_users)
+                    {
+                        if (user.Role == Role.Patient)
+                        {
+                            pendingUsers.Add(user);
+                        }
+                    }
+
+                    if (pendingUsers.Count == 0)  // this is to see if there is any pending registrations
+                    {
+                        Console.WriteLine("No users awaiting registration.");
+                        break;
+                    }
+
+                    Console.WriteLine("Pending registration requests:");
+                    foreach (User user in pendingUsers)
+                    {
+                        Console.WriteLine($"- {user.First_name} {user.Last_name} ({user.SSN})");
+                    }
+
+                    Console.WriteLine("Enter the SSN of the user you want to handle (or press enter to cancel): "); // lets the admin pick a user with ssn
+                    string? input = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(input))
+                        break;
+
+                    User? selectedUser = null;
+                    foreach (User user in pendingUsers)
+                    {
+                        if (user.SSN.Equals(input, StringComparison.OrdinalIgnoreCase))
+                        {
+                            selectedUser = user;
+                            break;
+                        }
+                    }
+                    if (selectedUser == null)
+                    {
+                        Console.WriteLine("No user found with that SSN.");
+                        break;
+                    }
+
+                    Console.WriteLine($"Do you want to (A)ccept or (D)eny {selectedUser.First_name} {selectedUser.Last_name}?");
+                    string? decision = Console.ReadLine();
+
+                    if (decision == "A")
+                    {
+                        Console.WriteLine($"{selectedUser.First_name} {selectedUser.Last_name} has been accepted as a patient.");
+                    }
+                    else if (decision == "D")
+                    {
+                        users.Remove(selectedUser);
+                        Console.WriteLine($"{selectedUser.First_name} {selectedUser.Last_name} has been denied and removed.");
+
+                        Save_System.SaveUpdatedUsers(users);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input. No action taken.");
+                    }
+                    Console.ReadLine();
+                    
+
+                    
                 }
                 break;
 
