@@ -118,12 +118,13 @@ static class Save_System
 
 
     private static readonly string LocationsFilePath = Path.Combine("data", "locations.txt");       //a searchpath for locations file 
+    
 
     public static void SaveLocation(string name, string city, Regions region, string address, string postalcode)        //method to save all locations to file
     {
         using (StreamWriter writer = new StreamWriter(LocationsFilePath, append: true))     
         {
-            writer.WriteLine(name + ", " + city + ", " + region + ", " + address + ", " + postalcode);
+            writer.WriteLine($"{name}; {city}; {address} {postalcode}");
         }
 
     }
@@ -146,12 +147,12 @@ static class Save_System
                 {
                     string name = parts[0].Trim();
                     string city = parts[1].Trim();
-                    string regString = parts[2].Trim();
+                    string region = parts[2].Trim();
                     string address = parts[3].Trim();
                     string postalcode = parts[4].Trim();
 
                     Regions reg;
-                    if(Enum.TryParse(regString, out reg) && !string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(city) && !string.IsNullOrWhiteSpace(address) && !string.IsNullOrWhiteSpace(postalcode))
+                    if(Enum.TryParse(region, out reg) && !string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(city) && !string.IsNullOrWhiteSpace(address) && !string.IsNullOrWhiteSpace(postalcode))
                     {
                         Location loc = new Location();
                         loc.Name = name;

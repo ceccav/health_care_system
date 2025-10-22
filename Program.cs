@@ -245,29 +245,9 @@ while (running)
                     break;
 
                 case "6":
-                    if (active_user.IsAllowed(App.Permissions.AddLocations))    //if user is allowed to add locations
+                    if (active_user.IsAllowed(App.Permissions.AddLocations)) ;
                     {
-                        Console.WriteLine("---Add a hospital---");
-                        List<string> hospitalList = new();
-                        Console.WriteLine("Region : Skåne, Stockholm, Blekinge ... ");
-                        Console.WriteLine("Write the name of the hospital: ");
-                        string hospital = Console.ReadLine();
-
-                        Console.WriteLine("Choose a region: ");
-
-                        Console.WriteLine("What region is the hospital in?: ");
-                        string region = Console.ReadLine();
-
-                        hospitalList.Add(hospital + " (" + region + ")");
-
-                        Console.WriteLine("You've added : " + hospital + " in " + region);
-
-
-                        foreach (string s in hospitalList)
-                        {
-                            Console.WriteLine("- " + s);
-                        }
-                        Console.ReadLine();
+                        AddLocation();
                     }
                     break;
 
@@ -451,12 +431,12 @@ void AddLocation()          //joel
     Console.WriteLine("Choose region: ");
     for (int i = 0; i < regions.Length; i++)            //loops through all regions
     {
-        Console.WriteLine((i + 1) + regions[i]);        //shows all regions
+        Console.WriteLine($"{i + 1}. {regions[i]}");        //shows all regions
     }
 
     Console.WriteLine("Number: ");
     string? regionInput = Console.ReadLine();
-    int regionIndex;
+    int regionIndex;        //to connect users menu number to an enum in my regions-list
 
     if (!int.TryParse(regionInput, out regionIndex) || regionIndex < 1 || regionIndex > regions.Length) //if its less than 1 or more than number of regions
     {
@@ -478,6 +458,13 @@ void AddLocation()          //joel
         Console.ReadLine();
         return;
     }
+
+    Save_System.SaveLocation(name, city, chosenRegion, address, postal);        //saves it in locations.txt
+
+    Console.WriteLine("Location added: ");
+    Console.WriteLine($" {name}, {city}, {chosenRegion}, {address}, {postal}");
+    Console.WriteLine("Press enter to return to the main menu ");
+    Console.ReadLine();
 
 }
 
