@@ -37,4 +37,39 @@ class EventManager
 
         return matchingAppointments;
     }
+    public void AddJournalEntry(string patientName, string doctorName, DateTime appointmentTime, string notes)
+    {
+        Save_System.SaveJournal(patientName, doctorName, appointmentTime, notes);
+    }
+
+    public List<Appointment> GetAppointmentsForAddingNotes()
+    {
+        List<Appointment> pending = new List<Appointment>();
+        List<JournalEntry> journals = Save_System.ReadJournal();
+        DateTime now = DateTime.Now;
+
+        foreach (Appointment appointment in _appointments)
+        {
+            if (appointment._startTime <= now)
+            {
+                bool hasNote = false;
+
+                //is there any journal entry for this visit?
+                foreach (JournalEntry journalEntry in journals)
+                {
+                    if (journalEntry.PatientName == appointment._patientName && journalEntry.AppointmentTime == appointment._startTime)
+                    {
+                        hasNote = true;
+                        break;
+                    }
+                }
+                if (!hasNote)
+                {
+                    pending.Add(appointment);
+                }
+            }
+        }
+
+        return pending;
+    }
 }

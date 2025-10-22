@@ -260,6 +260,13 @@ while (running)
                     Console.ReadLine();
                 }
                 break;
+            case "7":
+                if (active_user.IsAllowed(App.Permissions.WriteJournal))
+                {
+                    WriteJournalNote();
+                }
+                break;
+
 
         }
 
@@ -349,7 +356,56 @@ void ViewAppointment(string patientName)
     Console.WriteLine("Press ENTER to go back to menu");
     Console.ReadLine();
 }
+void WriteJournalNote()
+{
+    List<Appointment> pending = eventManager.GetAppointmentsForAddingNotes();
 
+    if (pending.Count == 0)
+    {
+        Console.WriteLine("No notes to write right now.");
+        Console.ReadLine();
+        return;
+    }
+
+    Console.WriteLine("Visits needing notes: ");
+    for (int i = 0; i < pending.Count; i++)
+    {
+        Appointment appointment = pending[i];
+        Console.WriteLine($"[{i + 1}] {appointment._startTime} | {appointment._patientName}");
+    }
+
+    Console.Write("Select visit number");
+    string choiceText = Console.ReadLine();
+    int id;
+
+    if (!int.TryParse(choiceText, out id) || id < 1 || id > pending.Count)
+    {
+        Console.WriteLine("Invalid choice.");
+        Console.ReadLine();
+        return;
+    }
+
+    Appointment selected = pending[id - 1];
+
+    Console.WriteLine("Write notes: ");
+    string notes = Console.ReadLine();
+
+    if (string.IsNullOrWhiteSpace(notes))
+    {
+        Console.WriteLine("Add note before continuing.");
+        Console.ReadLine();
+        return;
+    }
+
+    string doctorName = active_user.First_name + " " + active_user.Last_name;
+
+    eventManager.AddJournalEntry(selected._patientName, doctorName, selected._startTime, notes);
+
+    Console.WriteLine("Journal saved for" + selected._patientName + "(" + selected._startTime.ToString("yyyy-MM-dd HH:mm") + ")");
+    Console.WriteLine("-------------------------------------------------");
+    Console.WriteLine("             Press ENTER to go back to menu");
+    Console.ReadLine();
+}
 
 
 

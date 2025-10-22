@@ -8,6 +8,7 @@ public enum Permissions
     CreateAccountPersonnel, //måns 
 
     ViewPermissions,     //joel 
+    WriteJournal, //cecilia
 
 
 

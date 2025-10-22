@@ -104,13 +104,52 @@ static class Save_System
 
     }
 
-    public static void SaveJournal(string patientName, string doctorName, DateTime date, string notes)
+    public static void SaveJournal(string patientName, string doctorName, DateTime appointmentTime, string notes)
     {
-        Directory.CreateDirectory("data");
+        Directory.CreateDirectory("data"); //creates folder if it doesnt already exist
         using (StreamWriter writer = new StreamWriter(JournalsFilePath, append: true))
         {
-            writer.WriteLine($"{patientName} ; {doctorName} ; {date: yyyy-MM-dd} ; {notes}");
+            writer.WriteLine($"{patientName} ; {doctorName} ; {appointmentTime.ToString("yyyy-MM-dd HH:mm")} ; {notes}"); //what will be written in journal.txt
         }
+    }
+
+    //method to read journal from journal.txt. Takes the values in the textfiles, and splits it into 4 parts
+    //patient, dr, date and notes.
+    public static List<JournalEntry> ReadJournal()
+    {
+        List<JournalEntry> journal = new List<JournalEntry>();
+
+        if (!File.Exists(JournalsFilePath))
+            return journal;
+
+        using (StreamReader reader = new StreamReader(JournalsFilePath))
+        {
+            string? line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                string[] parts = line.Split(';'); //splits the line 
+                if (parts.Length >= 4)
+                {
+
+                    string patient = parts[0].Trim();
+                    string doctor = parts[1].Trim();
+                    DateTime apptTime;
+                    string notes = parts[3].Trim();
+
+
+
+
+                    if (!string.IsNullOrWhiteSpace(patient) && !string.IsNullOrWhiteSpace(doctor) && DateTime.TryParse(parts[2].Trim(), out apptTime))
+                    {
+                        journal.Add(new JournalEntry(patient, doctor, apptTime, notes)); //adds to journal list
+                    }
+                }
+
+                line = reader.ReadLine(); //read next line
+            }
+
+        }
+        return journal; //for one specifik person
     }
 }
 
