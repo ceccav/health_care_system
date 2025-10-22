@@ -15,3 +15,6 @@ hej; tjena; måns; oskarsson; Patient
 9999; 6666; rut; karlsson; Admin
 19961202; 123456789; Cecilia; Cavallin; Patient
 123123; 123; test; joel; Patient
+111; 222; weywty; dshhsh; Pending
+555; 666; qtqtq; gaavva; Patient
+777; 888; agah; adaga; Admin
