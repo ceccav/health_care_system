@@ -17,6 +17,7 @@ while (running)
 {
     if (active_user == null)
     {
+        TryClear();
         Console.WriteLine("Select a option");
         Console.WriteLine("1. Register as a patient");
         Console.WriteLine("2. Log in");
@@ -74,7 +75,7 @@ while (running)
                     Console.Write("Enter your SSN: ");
                     string? loginSSN = Console.ReadLine();
 
-                    Console.Write(" Enter your password: ");
+                    Console.Write("Enter your password: ");
                     string? loginPassword = Console.ReadLine();
 
                     bool loggedin = false;
@@ -462,7 +463,7 @@ void AddLocation()          //joel
     Save_System.SaveLocation(name, city, chosenRegion, address, postal);        //saves it in locations.txt
 
     Console.WriteLine("Location added: ");
-    Console.WriteLine($" {name}, {city}, {chosenRegion}, {address}, {postal}");
+    Console.WriteLine($"{chosenRegion} {city}, {name}, {address}, {postal}");
     Console.WriteLine("Press enter to return to the main menu ");
     Console.ReadLine();
 

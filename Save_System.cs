@@ -124,7 +124,7 @@ static class Save_System
     {
         using (StreamWriter writer = new StreamWriter(LocationsFilePath, append: true))     
         {
-            writer.WriteLine($"{name}; {city}; {address} {postalcode}");
+            writer.WriteLine($" {region}; {city}; {name}; {address}; {postalcode}");
         }
 
     }
