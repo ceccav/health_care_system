@@ -15,12 +15,12 @@ static class Save_System
     private static readonly string AppointmentsFilePath = Path.Combine("data", "appointments.txt");
 
     //method to save user logindata to file, as a static void so that we can implement it easier in our code
-    public static void SaveLogin(string ssn, string _password, string first_name, string last_name, Role role)
+    public static void SaveLogin(string ssn, string _password, string first_name, string last_name, Regions regions, Role role)
     {
         //append: true makes it possibly for us to add to the file without writing over anything
         using (StreamWriter writer = new StreamWriter(FilePath, append: true))
         {
-            writer.WriteLine($"{ssn}; {_password}; {first_name}; {last_name}; {role}");     //writer.writeline only writes to userdata.txt not in the console
+            writer.WriteLine($"{ssn}; {_password}; {first_name}; {last_name}; {regions} {role}");     //writer.writeline only writes to userdata.txt not in the console
         }
     }
     public static void SaveUpdatedUsers(List<User> users)     //used to save accepted patient and to remove denied patients
@@ -53,18 +53,20 @@ static class Save_System
             while ((line = reader.ReadLine()) != null) //while the user input is not empty
             {
                 string[] parts = line.Split(';'); //splits the line in to two parts
-                if (parts.Length >= 5)
+                if (parts.Length >= 6)
                 {
 
                     string ssn = parts[0].Trim();
                     string _password = parts[1].Trim();
                     string first_name = parts[2].Trim();
                     string last_name = parts[3].Trim();
-                    string roleString = parts[4].Trim();
+                    string regionsString = parts[4].Trim();
+                    string roleString = parts[5].Trim();
+                    
 
-                    if (Enum.TryParse(roleString, out Role role) && !string.IsNullOrWhiteSpace(ssn) && !string.IsNullOrWhiteSpace(_password) && !string.IsNullOrWhiteSpace(first_name) && !string.IsNullOrWhiteSpace(last_name))
+                    if (Enum.TryParse(roleString, out Role role) && Enum.TryParse(regionsString, out Regions regions) && !string.IsNullOrWhiteSpace(ssn) && !string.IsNullOrWhiteSpace(_password) && !string.IsNullOrWhiteSpace(first_name) && !string.IsNullOrWhiteSpace(last_name))
                     {
-                        User user = new User(ssn, _password, first_name, last_name, role);
+                        User user = new User(ssn, _password, first_name, last_name, regions, role);
                         users.Add(user);
                     }
                 }
@@ -74,12 +76,12 @@ static class Save_System
 
     }
 
-    public static void SaveAppointment(string patientName, DateTime startTime)
+    public static void SaveAppointment(string patientName, DateTime startTime, Regions regions)
     {
         Directory.CreateDirectory("data"); //create the file if it doesn't already exist
         using (StreamWriter writer = new StreamWriter(AppointmentsFilePath, append: true))
         {
-            writer.WriteLine(patientName + ";" + startTime.ToString("yyyy-MM-dd"));
+            writer.WriteLine(patientName + ";" + startTime.ToString("yyyy-MM-dd") + regions);
         }
     }
 
@@ -97,16 +99,19 @@ static class Save_System
             while ((line = reader.ReadLine()) != null) //while the user input is not empty
             {
                 string[] parts = line.Split(';'); //splits the line in to two parts
-                if (parts.Length == 2)
+                if (parts.Length == 3)
                 {
 
                     string name = parts[0].Trim();
                     DateTime time;
+                    Regions regions;
 
-                    if (DateTime.TryParse(parts[1].Trim(), out time))
+                    if (DateTime.TryParse(parts[1].Trim(), out time) && Enum.TryParse(parts[2].Trim(), true, out regions))
                     {
-                        appointments.Add(new Appointment(name, time));
+                        appointments.Add(new Appointment(name, time, regions));
                     }
+                    
+
                 }
 
                 line = reader.ReadLine(); //read next line

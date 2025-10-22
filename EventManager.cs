@@ -7,14 +7,14 @@ class EventManager
     private readonly List<Appointment> _appointments = new List<Appointment>();
 
     //Method to book a new appointment
-    public Appointment BookAppointment(string patientName, DateTime startTime)
+    public Appointment BookAppointment(string patientName, DateTime startTime, Regions regions)
     {
 
-        Appointment appointment = new Appointment(patientName, startTime); // creates new appointment-object
+        Appointment appointment = new Appointment(patientName, startTime, regions); // creates new appointment-object
         _appointments.Add(appointment); //adds to the list of all bookings
 
-        Save_System.SaveAppointment(patientName, startTime);
-        Console.WriteLine($"Appointment booked for {appointment._patientName}, on {appointment._startTime.ToString("yyyy-mm-dd HH:mm")}"); //writes out in console
+        Save_System.SaveAppointment(patientName, startTime, regions);
+        Console.WriteLine($"Appointment booked for {appointment._patientName}, on {appointment._startTime.ToString("yyyy-mm-dd HH:mm") + regions}"); //writes out in console
 
         return appointment;
     }

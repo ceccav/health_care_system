@@ -8,11 +8,14 @@ class Appointment
     public readonly string _patientName;
     public readonly DateTime _startTime;
 
+    public readonly Regions Regions;
+
     //Constructor that sets the patientname and startime
     //when the object is created it cannot be manipulated
-    public Appointment(string PatientName, DateTime startTime)
+    public Appointment(string PatientName, DateTime startTime, Regions regions)
     {
         _patientName = PatientName;
         _startTime = startTime;
+        Regions = regions;
     }
 }

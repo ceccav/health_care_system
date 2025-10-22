@@ -2,12 +2,12 @@
 using System.Runtime.CompilerServices;
 using System.Security;
 using App;
-EventManager eventManager = new(); // instansiates the eventhandler class
+EventManager eventManager = new();          // instansiates the eventhandler class
 
-List<User> users = new List<User>(); //List for all the users
-List<Location> locations = new List<Location>(); //List for all locations
+List<User> users = new List<User>();            //List for all the users
+List<Location> locations = new List<Location>();            //List for all locations
 bool running = true;
-User? active_user = null; //active user set to null when the program starts
+User? active_user = null;           //active user set to null when the program starts in all users from data/users.txt
 //Reads in all users from data/users.txt
 users = Save_System.ReadLogins();
 
@@ -42,6 +42,16 @@ while (running)
                     Console.Write("Enter your last name: ");
                     string? newlast_name = Console.ReadLine();
 
+                    Console.WriteLine("Choose your desired region: (Skåne, Stockholm, Blekinge, Västergötland, Norrbotten, Kalmar, Jämtland, Lappland, Ångermanland, Halland, Öland, Gotland, Dalarna)");
+                    string? regionsInput = Console.ReadLine();
+
+                    if (Enum.TryParse(regionsInput, true, out Regions regions) || (regions != Regions.Skåne && regions != Regions.Stockholms && regions != Regions.Blekinge && regions != Regions.Västergötland && regions != Regions.Norrbotten && regions != Regions.Kalmar && regions != Regions.Lappland && regions != Regions.Jämtland && regions != Regions.Ångermanland && regions != Regions.Halland && regions != Regions.Öland && regions != Regions.Gotland && regions != Regions.Dalarna))
+                    {
+                        Console.WriteLine("Invalid region, choose a valid one");
+                        break;
+                    }
+
+
                     if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name))
                     {
                         Console.WriteLine("SSN, first name, last name and password cannot be empty!");
@@ -58,15 +68,19 @@ while (running)
                     //gives created account for patient the role Pending
                     Role role = Role.Pending;
 
+
+
                     //create new user and add to the list
-                    User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name, role);
+                    User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name, regions, role);
                     users.Add(newuser);
 
                     //save user to the file
-                    Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name, role);
-                    Console.WriteLine("You have registrerd as a patient successfully.");
+                    Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name, regions, role);
+                    Console.WriteLine("You've successfully registered as a patient!");
+                    Console.ReadLine();
 
                 }
+                
                 break;
             case "2":
                 {
@@ -193,6 +207,16 @@ while (running)
                         Console.WriteLine("Choose a role for the personnel (Admin, Doctor, Nurse): ");
                         string? roleInput = Console.ReadLine();
 
+                        Console.WriteLine("Choose a region for the personell: Skåne, Stockholm, Blekinge, Västergötland, Norrbotten, Kalmar, Jämtland, Lappland, Ångermanland, Halland, Öland, Gotland, Dalarna ");
+                        string regionsInput = Console.ReadLine();
+
+                         if(Enum.TryParse(regionsInput, true, out Regions regions) || (regions != Regions.Skåne && regions != Regions.Stockholms && regions != Regions.Blekinge && regions != Regions.Västergötland && regions != Regions.Norrbotten && regions != Regions.Kalmar && regions != Regions.Lappland && regions != Regions. Jämtland && regions != Regions.Ångermanland && regions != Regions.Halland && regions != Regions.Öland && regions != Regions.Gotland && regions != Regions.Dalarna))
+                        {
+                             Console.WriteLine("Invalid region, choose a valid one");
+                            break;
+                         }
+
+
                         if (!Enum.TryParse(roleInput, true, out Role role) || (role != Role.Admin && role != Role.Doctor && role != Role.Nurse)) // controls if input is one of the existing roles
                         {
                             Console.WriteLine("Invalid role. Please enter Admin, Doctor or Nurse.");
@@ -217,11 +241,11 @@ while (running)
                         {
 
                             //create new user and add to the list
-                            User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name, role);
+                            User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name, regions, role);
                             users.Add(newuser);
 
                             //save user to the file
-                            Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name, role);
+                            Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name, regions, role);
                             Console.WriteLine($"The {role} account has been created");
                         }
                         Console.ReadLine();
@@ -246,7 +270,7 @@ while (running)
                     break;
 
                 case "6":
-                    if (active_user.IsAllowed(App.Permissions.AddLocations)) ;
+                    if (active_user.IsAllowed(App.Permissions.AddLocations))
                     {
                         AddLocation();
                     }
@@ -386,8 +410,10 @@ while (running)
         //create patiens fullname for printOut in the console and storage
         string fullName = active_user.First_name + " " + active_user.Last_name;
 
+        Regions regions = active_user.Regions;
+
         //Create the booking by calling the eventmanager
-        Appointment appointment = eventManager.BookAppointment(fullName, startTime);
+        Appointment appointment = eventManager.BookAppointment(fullName, startTime, regions);
 
         Console.WriteLine("Press ENTER to go back to menu");
         Console.ReadLine();
