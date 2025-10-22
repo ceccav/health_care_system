@@ -43,7 +43,7 @@ while (running)
                     if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name))
                     {
                         Console.WriteLine("SSN, first name, last name and password cannot be empty!");
-                        return;
+                        break;
                     }
 
                     //Controls if the username already exists
@@ -51,10 +51,10 @@ while (running)
                     if (userExists)
                     {
                         Console.WriteLine("That SSN is already taken.");
-                        return;
+                        break;
                     }
-                    //gives created account for patient the role patient
-                    Role role = Role.Patient;
+                    //gives created account for patient the role Pending
+                    Role role = Role.Pending;
 
                     //create new user and add to the list
                     User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name, role);
@@ -107,248 +107,337 @@ while (running)
     {
         TryClear();
 
-        if (active_user.IsAllowed(App.Permissions.ViewAllUsers))
+        while (true)
         {
-            Console.WriteLine("[1] - View all users");
-        }
-        if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
-        {
-            Console.WriteLine("[2] - View my journal");
-            Console.WriteLine("[3] - Book an appointment");
-        }
-        if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
-        {
-            Console.WriteLine("[4] - Create account for personnel");
-        }
-        if (active_user.IsAllowed(App.Permissions.ViewPermissions))
-        {
-            Console.WriteLine("[5] - View users and their permissions");
-        }
-        if (active_user.IsAllowed(App.Permissions.AddLocations))
-        {
-            Console.WriteLine("[6] - Add hospitals and their locations.");
-        }
+
+            if (active_user.IsAllowed(App.Permissions.ViewAllUsers))
+            {
+                Console.WriteLine("[1] - View all users");
+            }
+            if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+            {
+                Console.WriteLine("[2] - View my journal");
+                Console.WriteLine("[3] - Book an appointment");
+            }
+            if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
+            {
+                Console.WriteLine("[4] - Create account for personnel");
+            }
+            if (active_user.IsAllowed(App.Permissions.ViewPermissions))
+            {
+                Console.WriteLine("[5] - View users and their permissions");
+            }
+            if (active_user.IsAllowed(App.Permissions.AddLocations))
+            {
+                Console.WriteLine("[6] - Add hospitals and their locations.");
+            }
+            if (active_user.IsAllowed(App.Permissions.HandleRegistration))
+            {
+                Console.WriteLine("[7] - Handle registrations");
+            }
 
 
 
 
-        switch (Console.ReadLine())
-        {
-            case "1":       //if the user is allowed to view all users, show every user
-                if (active_user.IsAllowed(App.Permissions.ViewAllUsers))        //kan använda && 
-                {
-                    Console.WriteLine("All users: ");
-
-                    foreach (User user in users)        //for every user in my user list
+            switch (Console.ReadLine())
+            {
+                case "1":       //if the user is allowed to view all users, show every user
                     {
-                        Console.WriteLine($"{user.First_name} {user.Last_name}");       //show every user
-                    }
-                    Console.ReadLine();
-                }
-                break;
-
-            case "2":
-                if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
-                {
-
-
-                    string fullName = active_user.First_name + " " + active_user.Last_name;
-                    ViewAppointment(fullName);
-
-
-                }
-                break;
-
-            case "3":
-                if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
-                {
-                    BookAppointment();
-                }
-                break;
-
-            case "4":
-                if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
-                {
-                    Console.Write("Enter the SSN of the personell: ");
-                    string? newssn = Console.ReadLine();
-
-                    Console.Write("Enter the password to the personell: ");
-                    string? _newpassword = Console.ReadLine();
-
-                    Console.Write("Enter the first name of the personell: ");
-                    string? newfirst_name = Console.ReadLine();
-
-                    Console.Write("Enter the last name of the personell: ");
-                    string? newlast_name = Console.ReadLine();
-
-                    Console.WriteLine("Choose a role for the personnel (Admin, Doctor, Nurse): ");
-                    string? roleInput = Console.ReadLine();
-
-                    if (!Enum.TryParse(roleInput, true, out Role role) || (role != Role.Admin && role != Role.Doctor && role != Role.Nurse)) // controls if input is one of the existing roles
-                    {
-                        Console.WriteLine("Invalid role. Please enter Admin, Doctor or Nurse.");
-                        break;
-                    }
-
-                    if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name)) // controls so that input isn't empty
-
-                        if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name))
+                        if (active_user.IsAllowed(App.Permissions.ViewAllUsers))        //kan använda && 
                         {
-                            Console.WriteLine("SSN, first name, last name and password cannot be empty!");
+                            Console.WriteLine("All users: ");
+
+                            foreach (User user in users)        //for every user in my user list
+                                Console.WriteLine($"{user.First_name} {user.Last_name}");       //show every user
+                        }
+                        Console.ReadLine();
+                    }
+                    break;
+
+                case "2":
+                    if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+                    {
+
+
+                        string fullName = active_user.First_name + " " + active_user.Last_name;
+                        ViewAppointment(fullName);
+
+
+                    }
+                    break;
+
+                case "3":
+                    if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+                    {
+                        BookAppointment();
+                    }
+                    break;
+
+                case "4":
+                    if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
+                    {
+                        Console.Write("Enter the SSN of the personell: ");
+                        string? newssn = Console.ReadLine();
+
+                        Console.Write("Enter the password to the personell: ");
+                        string? _newpassword = Console.ReadLine();
+
+                        Console.Write("Enter the first name of the personell: ");
+                        string? newfirst_name = Console.ReadLine();
+
+                        Console.Write("Enter the last name of the personell: ");
+                        string? newlast_name = Console.ReadLine();
+
+                        Console.WriteLine("Choose a role for the personnel (Admin, Doctor, Nurse): ");
+                        string? roleInput = Console.ReadLine();
+
+                        if (!Enum.TryParse(roleInput, true, out Role role) || (role != Role.Admin && role != Role.Doctor && role != Role.Nurse)) // controls if input is one of the existing roles
+                        {
+                            Console.WriteLine("Invalid role. Please enter Admin, Doctor or Nurse.");
                             break;
                         }
 
-                    //Controls if the username already exists
-                    bool userExists = users.Exists(u => u.SSN.Equals(newssn, StringComparison.OrdinalIgnoreCase));
-                    if (userExists)
-                    {
-                        Console.WriteLine("That SSN is already taken.");
+                        if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name)) // controls so that input isn't empty
+
+                            if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name))
+                            {
+                                Console.WriteLine("SSN, first name, last name and password cannot be empty!");
+                                break;
+                            }
+
+                        //Controls if the username already exists
+                        bool userExists = users.Exists(u => u.SSN.Equals(newssn, StringComparison.OrdinalIgnoreCase));
+                        if (userExists)
+                        {
+                            Console.WriteLine("That SSN is already taken.");
+                        }
+                        else
+                        {
+
+                            //create new user and add to the list
+                            User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name, role);
+                            users.Add(newuser);
+
+                            //save user to the file
+                            Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name, role);
+                            Console.WriteLine($"The {role} account has been created");
+                        }
+                        Console.ReadLine();
+                        Console.WriteLine("Press enter to continue");
+                        Console.ReadLine();
                     }
-                    else
+                    break;
+
+                case "5":       //active user is allowed to view all users and their permissions
                     {
+                        if (active_user.IsAllowed(App.Permissions.ViewPermissions))     //if the user is allowed
+                        {
+                            Console.WriteLine("All users and their permissions: ");
 
-                        //create new user and add to the list
-                        User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name, role);
-                        users.Add(newuser);
-
-                        //save user to the file
-                        Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name, role);
-                        Console.WriteLine($"The {role} account has been created");
+                            foreach (User user in users)        //run through the list of users and show them, + their permissions
+                            {
+                                Console.WriteLine($"{user.First_name} {user.Last_name} {string.Join(", ", user.Permissions)}");
+                            }
+                            Console.ReadLine();
+                        }
                     }
-                    Console.ReadLine();
-                    Console.WriteLine("Press enter to continue");
-                    Console.ReadLine();
-                }
-                break;
+                    break;
 
-            case "5":       //active user is allowed to view all users and their permissions
-                if (active_user.IsAllowed(App.Permissions.ViewPermissions))     //if the user is allowed
-                {
-                    Console.WriteLine("All users and their permissions: ");
-
-                    foreach (User user in users)        //run through the list of users and show them, + their permissions
+                case "6":
+                    if (active_user.IsAllowed(App.Permissions.AddLocations))    //if user is allowed to add locations
                     {
-                        Console.WriteLine($"{user.First_name} {user.Last_name} {string.Join(", ", user.Permissions)}");
+                        Console.WriteLine("---Add a hospital---");
+                        List<string> hospitalList = new();
+                        Console.WriteLine("Region : Skåne, Stockholm, Blekinge ... ");
+                        Console.WriteLine("Write the name of the hospital: ");
+                        string hospital = Console.ReadLine();
+
+                        Console.WriteLine("Choose a region: ");
+
+                        Console.WriteLine("What region is the hospital in?: ");
+                        string region = Console.ReadLine();
+
+                        hospitalList.Add(hospital + " (" + region + ")");
+
+                        Console.WriteLine("You've added : " + hospital + " in " + region);
+
+
+                        foreach (string s in hospitalList)
+                        {
+                            Console.WriteLine("- " + s);
+                        }
+                        Console.ReadLine();
                     }
-                    Console.ReadLine();
-                }
-                break;
+                    break;
 
-            case "6":
-                if (active_user.IsAllowed(App.Permissions.AddLocations))    //if user is allowed to add locations
-                {
-                    Console.WriteLine("---Add a hospital---");
-                    List<string> hospitalList = new();
-                    Console.WriteLine("Region : Skåne, Stockholm, Blekinge ... ");
-                    Console.WriteLine("Write the name of the hospital: ");
-                    string hospital = Console.ReadLine();
-
-                    Console.WriteLine("Choose a region: ");
-
-                    Console.WriteLine("What region is the hospital in?: ");
-                    string region = Console.ReadLine();
-
-                    hospitalList.Add(hospital + " (" + region + ")");
-
-                    Console.WriteLine("You've added : " + hospital + " in " + region);
-
-
-                    foreach (string s in hospitalList)
+                case "7":
+                    if (active_user.IsAllowed(App.Permissions.HandleRegistration))
                     {
-                        Console.WriteLine("- " + s);
+                        Console.WriteLine("All users that want to register: ");
+
+                        List<User> allUsers = Save_System.ReadLogins();   // Load all users from file
+
+                        List<User> pendingUsers = new List<User>();  // get all users with role patient
+
+                        foreach (User user in allUsers)
+                        {
+                            if (user.Role == Role.Pending)
+
+                                pendingUsers.Add(user);
+
+                        }
+
+                        if (pendingUsers.Count == 0)  // this is to see if there is any pending registrations
+                        {
+                            Console.WriteLine("No users awaiting registration.");
+                            break;
+                        }
+
+                        Console.WriteLine("Pending registration requests:");    //showing pending users
+                        foreach (User user in pendingUsers)
+                        {
+                            Console.WriteLine($"- {user.First_name} {user.Last_name} ({user.SSN})");
+                        }
+
+                        Console.WriteLine("Enter the SSN of the user you want to handle (or press enter to cancel): "); // lets the admin pick a user with ssn
+                        string? input = Console.ReadLine();
+
+                        if (string.IsNullOrWhiteSpace(input))
+                            break;
+
+                        User? selectedUser = null;
+                        foreach (User user in allUsers)
+                        {
+                            if (user.SSN.Equals(input, StringComparison.OrdinalIgnoreCase) && user.Role == Role.Pending)
+                            {
+                                selectedUser = user;
+                                break;
+                            }
+                        }
+
+                        if (selectedUser == null)
+                        {
+                            Console.WriteLine("No user found with that SSN.");
+                            break;
+                        }
+
+                        Console.WriteLine($"Do you want to (A)ccept or (D)eny {selectedUser.First_name} {selectedUser.Last_name}?");
+                        string? decision = Console.ReadLine();
+
+                        if (decision != null && decision.Equals("A", StringComparison.OrdinalIgnoreCase))
+                        {
+                            selectedUser.Role = Role.Patient;  //if accepted the user gains role patient
+                            Console.WriteLine($"{selectedUser.First_name} {selectedUser.Last_name} has been accepted as a patient.");
+
+                        }
+                        else if (decision != null && decision.Equals("D", StringComparison.OrdinalIgnoreCase))        // if denied the user is removed from the users.txt
+                        {
+                            allUsers.Remove(selectedUser);
+                            Console.WriteLine($"{selectedUser.First_name} {selectedUser.Last_name} has been denied and removed.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid input. No action taken.");
+                        }
+                        Save_System.SaveUpdatedUsers(allUsers);  // saving accepted patient as patient in users.txt
+                        Console.WriteLine("Press enter to return to the main menu");
+                        Console.ReadLine();
+                        break;
                     }
-                    Console.ReadLine();
-                }
-                break;
+
+                    break;
+
+            }
+
+
+
+
+            //add code
+            // }
+            // if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+            // {
 
         }
 
-
-        //add code
-        // }
-        // if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
-        // {
-
+        //test
+    }
+}
+    void TryClear()
+    {
+        try { Console.Clear(); } catch { }
     }
 
-    //test
-}
-
-void TryClear()
-{
-    try { Console.Clear(); } catch { }
-}
-
-void BookAppointment()
-{
-    TryClear();
-
-    Console.WriteLine("=== Book an appointment ===");
-
-    Console.Write("Enter Date (YYYY-MM-DD): ");
-    string? dateInput = Console.ReadLine();
-
-    Console.Write("Enter time (HH:mm): ");
-    string? timeInput = Console.ReadLine();
-
-    DateTime datePart;
-    DateTime timePart;
-
-    //controls if the date is a valid date
-    if (!DateTime.TryParse(dateInput, out datePart))
+    void BookAppointment()
     {
-        Console.WriteLine("Not a valid date.");
+        TryClear();
+
+        Console.WriteLine("=== Book an appointment ===");
+
+        Console.Write("Enter Date (YYYY-MM-DD): ");
+        string? dateInput = Console.ReadLine();
+
+        Console.Write("Enter time (HH:mm): ");
+        string? timeInput = Console.ReadLine();
+
+        DateTime datePart;
+        DateTime timePart;
+
+        //controls if the date is a valid date
+        if (!DateTime.TryParse(dateInput, out datePart))
+        {
+            Console.WriteLine("Not a valid date.");
+            Console.ReadLine();
+            return;
+        }
+
+        //controls if the user entered a valid time
+        if (!DateTime.TryParse(timeInput, out timePart))
+        {
+            Console.WriteLine("Not valid time.");
+            Console.ReadLine();
+            return;
+        }
+
+        //combines date and time to a completed value. .Date and .TimeOfDay shows only the date and the time isntead of the full year and so on.
+        DateTime startTime = datePart.Date + timePart.TimeOfDay;
+
+        //create patiens fullname for printOut in the console and storage
+        string fullName = active_user.First_name + " " + active_user.Last_name;
+
+        //Create the booking by calling the eventmanager
+        Appointment appointment = eventManager.BookAppointment(fullName, startTime);
+
+        Console.WriteLine("Press ENTER to go back to menu");
         Console.ReadLine();
-        return;
+
     }
 
-    //controls if the user entered a valid time
-    if (!DateTime.TryParse(timeInput, out timePart))
+    void ViewAppointment(string patientName)
     {
-        Console.WriteLine("Not valid time.");
+        TryClear();
+        Console.WriteLine("==== YOUR BOOKED APPOINTMENTS ====");
+
+        //get all upcoming bookings for the patient
+        List<Appointment> myAppointments = eventManager.GetAppointmentsFor(patientName, true);
+
+        if (myAppointments.Count == 0)
+        {
+            Console.WriteLine("You have no upcoming appointments. ");
+            Console.WriteLine("\n Press ENTER to go back to menu");
+            Console.ReadLine();
+            return;
+        }
+
+        //ADD LOCATION BEFORE date and time
+        foreach (Appointment appointment in myAppointments)
+        {
+            Console.WriteLine(appointment._startTime.ToString("yyyy-MM-dd HH:mm")); //add description like visit with DR... or Nurse.. for health checkup....
+        }
+
+        Console.WriteLine("Press ENTER to go back to menu");
         Console.ReadLine();
-        return;
     }
 
-    //combines date and time to a completed value. .Date and .TimeOfDay shows only the date and the time isntead of the full year and so on.
-    DateTime startTime = datePart.Date + timePart.TimeOfDay;
-
-    //create patiens fullname for printOut in the console and storage
-    string fullName = active_user.First_name + " " + active_user.Last_name;
-
-    //Create the booking by calling the eventmanager
-    Appointment appointment = eventManager.BookAppointment(fullName, startTime);
-
-    Console.WriteLine("Press ENTER to go back to menu");
-    Console.ReadLine();
-
-}
-
-void ViewAppointment(string patientName)
-{
-    TryClear();
-    Console.WriteLine("==== YOUR BOOKED APPOINTMENTS ====");
-
-    //get all upcoming bookings for the patient
-    List<Appointment> myAppointments = eventManager.GetAppointmentsFor(patientName, true);
-
-    if (myAppointments.Count == 0)
-    {
-        Console.WriteLine("You have no upcoming appointments. ");
-        Console.WriteLine("\n Press ENTER to go back to menu");
-        Console.ReadLine();
-        return;
-    }
-
-    //ADD LOCATION BEFORE date and time
-    foreach (Appointment appointment in myAppointments)
-    {
-        Console.WriteLine(appointment._startTime.ToString("yyyy-MM-dd HH:mm")); //add description like visit with DR... or Nurse.. for health checkup....
-    }
-
-    Console.WriteLine("Press ENTER to go back to menu");
-    Console.ReadLine();
-}
 
 
 
