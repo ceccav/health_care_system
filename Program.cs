@@ -118,7 +118,7 @@ while (running)
     else
     {
         TryClear();
-
+        
         while (true)
         {
 
@@ -144,8 +144,8 @@ while (running)
                 Console.WriteLine("[9] - View users and their permissions");
             }
 
-
-
+        
+        
             switch (Console.ReadLine())
             {
                 case "1":       //if the user is allowed to view all users, show every user
