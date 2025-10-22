@@ -362,81 +362,81 @@ while (running)
         //test
     }
 }
-    void TryClear()
+void TryClear()
+{
+    try { Console.Clear(); } catch { }
+}
+
+void BookAppointment()
+{
+    TryClear();
+
+    Console.WriteLine("=== Book an appointment ===");
+
+    Console.Write("Enter Date (YYYY-MM-DD): ");
+    string? dateInput = Console.ReadLine();
+
+    Console.Write("Enter time (HH:mm): ");
+    string? timeInput = Console.ReadLine();
+
+    DateTime datePart;
+    DateTime timePart;
+
+    //controls if the date is a valid date
+    if (!DateTime.TryParse(dateInput, out datePart))
     {
-        try { Console.Clear(); } catch { }
-    }
-
-    void BookAppointment()
-    {
-        TryClear();
-
-        Console.WriteLine("=== Book an appointment ===");
-
-        Console.Write("Enter Date (YYYY-MM-DD): ");
-        string? dateInput = Console.ReadLine();
-
-        Console.Write("Enter time (HH:mm): ");
-        string? timeInput = Console.ReadLine();
-
-        DateTime datePart;
-        DateTime timePart;
-
-        //controls if the date is a valid date
-        if (!DateTime.TryParse(dateInput, out datePart))
-        {
-            Console.WriteLine("Not a valid date.");
-            Console.ReadLine();
-            return;
-        }
-
-        //controls if the user entered a valid time
-        if (!DateTime.TryParse(timeInput, out timePart))
-        {
-            Console.WriteLine("Not valid time.");
-            Console.ReadLine();
-            return;
-        }
-
-        //combines date and time to a completed value. .Date and .TimeOfDay shows only the date and the time isntead of the full year and so on.
-        DateTime startTime = datePart.Date + timePart.TimeOfDay;
-
-        //create patiens fullname for printOut in the console and storage
-        string fullName = active_user.First_name + " " + active_user.Last_name;
-
-        //Create the booking by calling the eventmanager
-        Appointment appointment = eventManager.BookAppointment(fullName, startTime);
-
-        Console.WriteLine("Press ENTER to go back to menu");
+        Console.WriteLine("Not a valid date.");
         Console.ReadLine();
-
+        return;
     }
 
-    void ViewAppointment(string patientName)
+    //controls if the user entered a valid time
+    if (!DateTime.TryParse(timeInput, out timePart))
     {
-        TryClear();
-        Console.WriteLine("==== YOUR BOOKED APPOINTMENTS ====");
-
-        //get all upcoming bookings for the patient
-        List<Appointment> myAppointments = eventManager.GetAppointmentsFor(patientName, true);
-
-        if (myAppointments.Count == 0)
-        {
-            Console.WriteLine("You have no upcoming appointments. ");
-            Console.WriteLine("\n Press ENTER to go back to menu");
-            Console.ReadLine();
-            return;
-        }
-
-        //ADD LOCATION BEFORE date and time
-        foreach (Appointment appointment in myAppointments)
-        {
-            Console.WriteLine(appointment._startTime.ToString("yyyy-MM-dd HH:mm")); //add description like visit with DR... or Nurse.. for health checkup....
-        }
-
-        Console.WriteLine("Press ENTER to go back to menu");
+        Console.WriteLine("Not valid time.");
         Console.ReadLine();
+        return;
     }
+
+    //combines date and time to a completed value. .Date and .TimeOfDay shows only the date and the time isntead of the full year and so on.
+    DateTime startTime = datePart.Date + timePart.TimeOfDay;
+
+    //create patiens fullname for printOut in the console and storage
+    string fullName = active_user.First_name + " " + active_user.Last_name;
+
+    //Create the booking by calling the eventmanager
+    Appointment appointment = eventManager.BookAppointment(fullName, startTime);
+
+    Console.WriteLine("Press ENTER to go back to menu");
+    Console.ReadLine();
+
+}
+
+void ViewAppointment(string patientName)
+{
+    TryClear();
+    Console.WriteLine("==== YOUR BOOKED APPOINTMENTS ====");
+
+    //get all upcoming bookings for the patient
+    List<Appointment> myAppointments = eventManager.GetAppointmentsFor(patientName, true);
+
+    if (myAppointments.Count == 0)
+    {
+        Console.WriteLine("You have no upcoming appointments. ");
+        Console.WriteLine("\n Press ENTER to go back to menu");
+        Console.ReadLine();
+        return;
+    }
+
+    //ADD LOCATION BEFORE date and time
+    foreach (Appointment appointment in myAppointments)
+    {
+        Console.WriteLine(appointment._startTime.ToString("yyyy-MM-dd HH:mm")); //add description like visit with DR... or Nurse.. for health checkup....
+    }
+
+    Console.WriteLine("Press ENTER to go back to menu");
+    Console.ReadLine();
+}
 
 
 
