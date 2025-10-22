@@ -8,16 +8,19 @@ namespace App;
 static class Save_System
 {
     //searchpath for the file with user data
-    private static readonly string FilePath = Path.Combine("data", "users.txt");
+    private static readonly string UserFilePath = Path.Combine("data", "users.txt");
 
     //searchpatch for appointments
     private static readonly string AppointmentsFilePath = Path.Combine("data", "appointments.txt");
+
+    //searchpatch for journals
+    private static readonly string JournalsFilePath = Path.Combine("data", "journals.txt");
 
     //method to save user logindata to file, as a static void so that we can implement it easier in our code
     public static void SaveLogin(string ssn, string _password, string first_name, string last_name, Role role)
     {
         //append: true makes it possibly for us to add to the file without writing over anything
-        using (StreamWriter writer = new StreamWriter(FilePath, append: true))
+        using (StreamWriter writer = new StreamWriter(UserFilePath, append: true))
         {
             writer.WriteLine($"{ssn}; {_password}; {first_name}; {last_name}; {role}");     //writer.writeline only writes to userdata.txt not in the console
         }
@@ -42,11 +45,11 @@ static class Save_System
         List<User> users = new List<User>();
 
         //if the file doesn't exist return an empty list
-        if (!File.Exists(FilePath))
+        if (!File.Exists(UserFilePath))
             return users;
 
         //reads the file one row in a time
-        using (StreamReader reader = new StreamReader(FilePath)) //instans of new streamreader
+        using (StreamReader reader = new StreamReader(UserFilePath)) //instans of new streamreader
         {
             string? line;
             while ((line = reader.ReadLine()) != null) //while the user input is not empty
@@ -113,6 +116,54 @@ static class Save_System
         }
         return appointments;
 
+    }
+
+    public static void SaveJournal(string patientName, string doctorName, DateTime appointmentTime, string notes)
+    {
+        Directory.CreateDirectory("data"); //creates folder if it doesnt already exist
+        using (StreamWriter writer = new StreamWriter(JournalsFilePath, append: true))
+        {
+            writer.WriteLine($"{patientName} ; {doctorName} ; {appointmentTime.ToString("yyyy-MM-dd HH:mm")} ; {notes}"); //what will be written in journal.txt
+        }
+    }
+
+    //method to read journal from journal.txt. Takes the values in the textfiles, and splits it into 4 parts
+    //patient, dr, date and notes.
+    public static List<JournalEntry> ReadJournal()
+    {
+        List<JournalEntry> journal = new List<JournalEntry>();
+
+        if (!File.Exists(JournalsFilePath))
+            return journal;
+
+        using (StreamReader reader = new StreamReader(JournalsFilePath))
+        {
+            string? line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                string[] parts = line.Split(';'); //splits the line 
+                if (parts.Length >= 4)
+                {
+
+                    string patient = parts[0].Trim();
+                    string doctor = parts[1].Trim();
+                    DateTime apptTime;
+                    string notes = parts[3].Trim();
+
+
+
+
+                    if (!string.IsNullOrWhiteSpace(patient) && !string.IsNullOrWhiteSpace(doctor) && DateTime.TryParse(parts[2].Trim(), out apptTime))
+                    {
+                        journal.Add(new JournalEntry(patient, doctor, apptTime, notes)); //adds to journal list
+                    }
+                }
+
+                line = reader.ReadLine(); //read next line
+            }
+
+        }
+        return journal; //for one specifik person
     }
 }
 

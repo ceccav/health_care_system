@@ -1,3 +1,20 @@
+admin; admin
+0012196333; måns; oskarsson; 123
+12345; måns; oskarsson; 123
+123456789; måns; oskarsson; 123
+147; måns; oskarsson; 258
+789; 456; måns; oskarsson
+567; Jolle; Bolle; 123
+000; joel; bulle; 123
+369; 258; måns; oskarsson
+hej; tjena; måns; oskarsson; Patient
+0000; 1111; kian; lind; Admin
+2222; 3333; ulf; joli; Nurse
+7777; 8888; johan; persson; Doctor
+4444; 5555; yngve; lundell; Doctor
+9999; 6666; rut; karlsson; Admin
+19961202; 123456789; Cecilia; Cavallin; Patient
+123123; 123; test; joel; Patient
 111; 222; weywty; dshhsh; Pending
 555; 666; qtqtq; gaavva; Patient
 777; 888; agah; adaga; Admin
