@@ -1,0 +1,2 @@
+33333 ; Cecilia Cavallin ; Sol Doktorn ; 2025-10-19 09:00:00 ; Patient had a fever from working to hard, sent home for some rest and do not disturb on her phone.
+33333; Cecilia Cavallin ; Sol Doktorn ; 2025-10-21 13:30:00 ; Patient hade backtroubles from always working from the couch, cracked her back and sent her home withouth any meds. 
