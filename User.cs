@@ -4,7 +4,7 @@ using System;
 
 namespace App;
 
-class User
+public class User
 {
     public string SSN;
     string Password;
@@ -12,6 +12,9 @@ class User
     public string Last_name;
     public Role Role;
     public List<Permissions> Permissions = new();
+    public List<Role> roles = new List<Role> { Role.Pending };
+    
+    
 
     public User(string ssn, string password, string first_name, string last_name, Role role)
     {
@@ -41,6 +44,11 @@ class User
         }
     }
 
+    public string GetPasswordForSaving()
+    {
+        return Password;
+    }
+
 }
 
 public enum Role
@@ -50,4 +58,5 @@ public enum Role
     Doctor,
     Patient,
     Nurse,
+    Pending,
 }

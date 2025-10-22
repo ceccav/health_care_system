@@ -23,6 +23,20 @@ static class Save_System
             writer.WriteLine($"{ssn}; {_password}; {first_name}; {last_name}; {role}");     //writer.writeline only writes to userdata.txt not in the console
         }
     }
+    public static void SaveUpdatedUsers(List<User> users)     //used to save accepted patient and to remove denied patients
+    {
+        string FilePath = Path.Combine("data", "users.txt");
+
+        using (StreamWriter writer = new StreamWriter(FilePath, append: false))
+        {
+            foreach (User user in users)
+            {
+                writer.WriteLine($"{user.SSN}; {user.GetPasswordForSaving()}; {user.First_name}; {user.Last_name}; {user.Role}");
+            }
+        }
+    }
+
+
     //method to read all the users from the file
     public static List<User> ReadLogins()
     {
