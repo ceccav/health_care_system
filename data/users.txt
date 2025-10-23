@@ -2,3 +2,5 @@
 11111; test; Sol; Doktorn; Doctor
 22222; test; Anna; Andersson; Nurse
 33333; test; Cecilia; Cavallin; Patient 
+9090; 111; jollebolle; snus; Pending
+555; 555; måns; snus; Doctor
