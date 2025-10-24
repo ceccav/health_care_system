@@ -14,8 +14,10 @@ users = Save_System.ReadLogins();
 
 while (running)
 {
+
     if (active_user == null)
     {
+        TryClear();
         Console.WriteLine("Select a option");
         Console.WriteLine("1. Register as a patient");
         Console.WriteLine("2. Log in");
@@ -27,8 +29,9 @@ while (running)
 
             case "1":
                 {
-
-                    Console.Write("Enter your SSN: ");
+                    TryClear();
+                    Console.WriteLine("===== REGISTER AS A PATIENT =====");
+                    Console.Write("Enter your Social security number: ");
                     string? newssn = Console.ReadLine();
 
                     Console.Write("Enter your password: ");
@@ -47,7 +50,7 @@ while (running)
                     }
 
                     //Controls if the username already exists
-                    bool userExists = users.Exists(u => u.SSN.Equals(newssn, StringComparison.OrdinalIgnoreCase));
+                    bool userExists = users.Exists(u => u.SSN.Equals(newssn, StringComparison.OrdinalIgnoreCase)); //doesn't matter if it's capital or not
                     if (userExists)
                     {
                         Console.WriteLine("That SSN is already taken.");
@@ -70,7 +73,8 @@ while (running)
                 {
                     users = Save_System.ReadLogins();
 
-                    Console.Write("Enter your SSN: ");
+                    TryClear();
+                    Console.Write("Enter your social security number: ");
                     string? loginSSN = Console.ReadLine();
 
                     Console.Write(" Enter your password: ");
@@ -109,6 +113,8 @@ while (running)
 
         while (true)
         {
+            if (active_user == null)
+                break;
 
             if (active_user.IsAllowed(App.Permissions.ViewAllUsers))
             {
@@ -143,6 +149,10 @@ while (running)
             {
                 Console.WriteLine("[9] - See my journal");
             }
+            if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+            {
+                Console.WriteLine("[Q] - logout");
+            }
 
 
 
@@ -153,6 +163,7 @@ while (running)
                     {
                         if (active_user.IsAllowed(App.Permissions.ViewAllUsers))        //kan använda && 
                         {
+                            TryClear();
                             Console.WriteLine("All users: ");
 
                             foreach (User user in users)        //for every user in my user list
@@ -184,7 +195,9 @@ while (running)
                 case "4":
                     if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
                     {
-                        Console.Write("Enter the SSN of the personell: ");
+                        TryClear();
+                        Console.WriteLine("======= REGISTER A PERSONELL =======");
+                        Console.Write("Enter the social security number of the personell: ");
                         string? newssn = Console.ReadLine();
 
                         Console.Write("Enter the password to the personell: ");
@@ -240,6 +253,7 @@ while (running)
                     {
                         if (active_user.IsAllowed(App.Permissions.ViewPermissions))     //if the user is allowed
                         {
+                            TryClear();
                             Console.WriteLine("All users and their permissions: ");
 
                             foreach (User user in users)        //run through the list of users and show them, + their permissions
@@ -254,16 +268,17 @@ while (running)
                 case "6":
                     if (active_user.IsAllowed(App.Permissions.AddLocations))    //if user is allowed to add locations
                     {
+                        TryClear();
                         Console.WriteLine("---Add a hospital---");
                         List<string> hospitalList = new();
                         Console.WriteLine("Region : Skåne, Stockholm, Blekinge ... ");
                         Console.WriteLine("Write the name of the hospital: ");
-                        string hospital = Console.ReadLine();
+                        string? hospital = Console.ReadLine();
 
                         Console.WriteLine("Choose a region: ");
 
                         Console.WriteLine("What region is the hospital in?: ");
-                        string region = Console.ReadLine();
+                        string? region = Console.ReadLine();
 
                         hospitalList.Add(hospital + " (" + region + ")");
 
@@ -281,6 +296,7 @@ while (running)
                 case "7":
                     if (active_user.IsAllowed(App.Permissions.HandleRegistration))
                     {
+                        TryClear();
                         Console.WriteLine("All users that want to register: ");
 
                         List<User> allUsers = Save_System.ReadLogins();   // Load all users from file
@@ -366,20 +382,12 @@ while (running)
                         ViewMyJournal();
                     }
                     break;
-
+                case "q":
+                    active_user = null;
+                    break;
             }
-
-
-
-
-            //add code
-            // }
-            // if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
-            // {
-
         }
 
-        //test
     }
 }
 void TryClear()
@@ -464,6 +472,7 @@ void ViewAppointment(string patientName)
 
 void WriteJournalNote()
 {
+    TryClear();
     //Gets all the passed appointments that don't have a note yet
     List<Appointment> pending = eventManager.GetAppointmentsForAddingNotes();
 
@@ -475,7 +484,7 @@ void WriteJournalNote()
     }
 
     //Shows all of the passed appointments who need a note
-    Console.WriteLine("Visits needing notes: ");
+    Console.WriteLine("Visits needing notes: \n");
     for (int i = 0; i < pending.Count; i++)
     {
         Appointment appointment = pending[i];
@@ -483,13 +492,14 @@ void WriteJournalNote()
     }
 
     Console.Write("Select visit number");
-    string choiceText = Console.ReadLine();
+    string? choiceText = Console.ReadLine();
     int id;
 
 
     //validates choice
     if (!int.TryParse(choiceText, out id) || id < 1 || id > pending.Count)
     {
+        TryClear();
         Console.WriteLine("Invalid choice.");
         Console.ReadLine();
         return;
@@ -500,10 +510,11 @@ void WriteJournalNote()
 
     //Lets the user (dr) write the note
     Console.WriteLine("Write notes: ");
-    string notes = Console.ReadLine();
+    string? notes = Console.ReadLine();
 
     if (string.IsNullOrWhiteSpace(notes))
     {
+        TryClear();
         Console.WriteLine("Add note before continuing.");
         Console.ReadLine();
         return;
@@ -514,6 +525,8 @@ void WriteJournalNote()
 
     //save to the journal, connected by SSN and time of visit
     eventManager.AddJournalEntry(selected._ssn, selected._patientName, doctorName, selected._startTime, notes);
+
+    TryClear();
 
     Console.WriteLine("Journal saved for" + selected._patientName + "(" + selected._startTime.ToString("yyyy-MM-dd HH:mm") + ")");
     Console.WriteLine("-------------------------------------------------");
