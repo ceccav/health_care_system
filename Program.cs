@@ -15,6 +15,7 @@ users = Save_System.ReadLogins();
 
 while (running)
 {
+
     if (active_user == null)
     {
         TryClear();
@@ -29,8 +30,9 @@ while (running)
 
             case "1":
                 {
-
-                    Console.Write("Enter your SSN: ");
+                    TryClear();
+                    Console.WriteLine("===== REGISTER AS A PATIENT =====");
+                    Console.Write("Enter your Social security number: ");
                     string? newssn = Console.ReadLine();
 
                     Console.Write("Enter your password: ");
@@ -59,7 +61,7 @@ while (running)
                     }
 
                     //Controls if the username already exists
-                    bool userExists = users.Exists(u => u.SSN.Equals(newssn, StringComparison.OrdinalIgnoreCase));
+                    bool userExists = users.Exists(u => u.SSN.Equals(newssn, StringComparison.OrdinalIgnoreCase)); //doesn't matter if it's capital or not
                     if (userExists)
                     {
                         Console.WriteLine("That SSN is already taken.");
@@ -86,7 +88,8 @@ while (running)
                 {
                     users = Save_System.ReadLogins();
 
-                    Console.Write("Enter your SSN: ");
+                    TryClear();
+                    Console.Write("Enter your social security number: ");
                     string? loginSSN = Console.ReadLine();
 
                     Console.Write("Enter your password: ");
@@ -125,6 +128,8 @@ while (running)
 
         while (true)
         {
+            if (active_user == null)
+                break;
 
             if (active_user.IsAllowed(App.Permissions.ViewAllUsers))
             {
@@ -132,7 +137,7 @@ while (running)
             }
             if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
             {
-                Console.WriteLine("[2] - View my journal");
+                Console.WriteLine("[2] - View booked appointment");
                 Console.WriteLine("[3] - Book an appointment");
             }
             if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
@@ -151,6 +156,18 @@ while (running)
             {
                 Console.WriteLine("[7] - Handle registrations");
             }
+            if (active_user.IsAllowed(App.Permissions.WriteJournal))
+            {
+                Console.WriteLine("[8] - Write journalnote");
+            }
+            if (active_user.IsAllowed(App.Permissions.WriteJournal))
+            {
+                Console.WriteLine("[9] - See my journal");
+            }
+            if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+            {
+                Console.WriteLine("[Q] - logout");
+            }
 
 
 
@@ -161,6 +178,7 @@ while (running)
                     {
                         if (active_user.IsAllowed(App.Permissions.ViewAllUsers))        //kan använda && 
                         {
+                            TryClear();
                             Console.WriteLine("All users: ");
 
                             foreach (User user in users)        //for every user in my user list
@@ -192,7 +210,9 @@ while (running)
                 case "4":
                     if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
                     {
-                        Console.Write("Enter the SSN of the personell: ");
+                        TryClear();
+                        Console.WriteLine("======= REGISTER A PERSONELL =======");
+                        Console.Write("Enter the social security number of the personell: ");
                         string? newssn = Console.ReadLine();
 
                         Console.Write("Enter the password to the personell: ");
@@ -258,6 +278,7 @@ while (running)
                     {
                         if (active_user.IsAllowed(App.Permissions.ViewPermissions))     //if the user is allowed
                         {
+                            TryClear();
                             Console.WriteLine("All users and their permissions: ");
 
                             foreach (User user in users)        //run through the list of users and show them, + their permissions
@@ -279,6 +300,7 @@ while (running)
                 case "7":
                     if (active_user.IsAllowed(App.Permissions.HandleRegistration))
                     {
+                        TryClear();
                         Console.WriteLine("All users that want to register: ");
 
                         List<User> allUsers = Save_System.ReadLogins();   // Load all users from file
@@ -352,28 +374,136 @@ while (running)
                     }
 
                     break;
-
+                case "8":
+                    if (active_user.IsAllowed(App.Permissions.WriteJournal))
+                    {
+                        WriteJournalNote();
+                    }
+                    break;
+                case "9":
+                    if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+                    {
+                        ViewMyJournal();
+                    }
+                    break;
+                case "q":
+                    active_user = null;
+                    break;
             }
-
-
-
-
-            //add code
-            // }
-            // if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
-            // {
-
         }
 
-        //test
     }
 }
-    void TryClear()
+void TryClear()
+{
+    try { Console.Clear(); } catch { }
+}
+
+void BookAppointment()
+{
+    TryClear();
+
+    Console.WriteLine("=== Book an appointment ===");
+
+    Console.Write("Enter Date (YYYY-MM-DD): ");
+    string? dateInput = Console.ReadLine();
+
+    Console.Write("Enter time (HH:mm): ");
+    string? timeInput = Console.ReadLine();
+
+    DateTime datePart;
+    DateTime timePart;
+
+    //controls if the date is a valid date
+    if (!DateTime.TryParse(dateInput, out datePart))
     {
-        try { Console.Clear(); } catch { }
+        Console.WriteLine("Not a valid date.");
+        Console.ReadLine();
+        return;
     }
 
-    void BookAppointment()
+    //controls if the user entered a valid time
+    if (!DateTime.TryParse(timeInput, out timePart))
+    {
+        Console.WriteLine("Not valid time.");
+        Console.ReadLine();
+        return;
+    }
+
+    //combines date and time to a completed value. .Date and .TimeOfDay shows only the date and the time isntead of the full year and so on.
+    DateTime startTime = datePart.Date + timePart.TimeOfDay;
+
+    //create patiens fullname for printOut in the console and storage
+    string fullName = active_user.First_name + " " + active_user.Last_name;
+
+    //creates the users ssn for printout and storage
+    string ssn = active_user.SSN;
+
+    Regions regions = active_user.Regions;
+
+    //Create the booking by calling the eventmanager
+    Appointment appointment = eventManager.BookAppointment(ssn, fullName, startTime, regions);
+
+    Console.WriteLine("Press ENTER to go back to menu");
+    Console.ReadLine();
+
+}
+
+void ViewAppointment(string patientName)
+{
+    TryClear();
+    Console.WriteLine("==== YOUR BOOKED APPOINTMENTS ====");
+
+    //get all upcoming bookings for the patient
+    List<Appointment> myAppointments = eventManager.GetAppointmentsFor(patientName, true);
+
+    if (myAppointments.Count == 0)
+    {
+        Console.WriteLine("You have no upcoming appointments. ");
+        Console.WriteLine("\n Press ENTER to go back to menu");
+        Console.ReadLine();
+        return;
+    }
+
+    //ADD LOCATION BEFORE date and time
+    foreach (Appointment appointment in myAppointments)
+    {
+        Console.WriteLine(appointment._startTime.ToString("yyyy-MM-dd HH:mm")); //add description like visit with DR... or Nurse.. for health checkup....
+    }
+
+    Console.WriteLine("Press ENTER to go back to menu");
+    Console.ReadLine();
+}
+
+
+void WriteJournalNote()
+{
+    TryClear();
+    //Gets all the passed appointments that don't have a note yet
+    List<Appointment> pending = eventManager.GetAppointmentsForAddingNotes();
+
+    if (pending.Count == 0)
+    {
+        Console.WriteLine("No notes to write right now.");
+        Console.ReadLine();
+        return;
+    }
+
+    //Shows all of the passed appointments who need a note
+    Console.WriteLine("Visits needing notes: \n");
+    for (int i = 0; i < pending.Count; i++)
+    {
+        Appointment appointment = pending[i];
+        Console.WriteLine($"[{i + 1}] {appointment._startTime} | {appointment._patientName}");
+    }
+
+    Console.Write("Select visit number");
+    string? choiceText = Console.ReadLine();
+    int id;
+
+
+    //validates choice
+    if (!int.TryParse(choiceText, out id) || id < 1 || id > pending.Count)
     {
         TryClear();
 
@@ -409,43 +539,82 @@ while (running)
 
         //create patiens fullname for printOut in the console and storage
         string fullName = active_user.First_name + " " + active_user.Last_name;
+        string ssn = active_user.SSN;
 
         Regions regions = active_user.Regions;
 
+
         //Create the booking by calling the eventmanager
-        Appointment appointment = eventManager.BookAppointment(fullName, startTime, regions);
+        Appointment appointment = eventManager.BookAppointment(ssn, fullName, startTime, regions);
 
         Console.WriteLine("Press ENTER to go back to menu");
         Console.ReadLine();
-
+        return;
     }
 
-    void ViewAppointment(string patientName)
+    //picks out the chosen appointment to write a note for
+    Appointment selected = pending[id - 1];
+
+    //Lets the user (dr) write the note
+    Console.WriteLine("Write notes: ");
+    string? notes = Console.ReadLine();
+
+    if (string.IsNullOrWhiteSpace(notes))
     {
         TryClear();
-        Console.WriteLine("==== YOUR BOOKED APPOINTMENTS ====");
-
-        //get all upcoming bookings for the patient
-        List<Appointment> myAppointments = eventManager.GetAppointmentsFor(patientName, true);
-
-        if (myAppointments.Count == 0)
-        {
-            Console.WriteLine("You have no upcoming appointments. ");
-            Console.WriteLine("\n Press ENTER to go back to menu");
-            Console.ReadLine();
-            return;
-        }
-
-        //ADD LOCATION BEFORE date and time
-        foreach (Appointment appointment in myAppointments)
-        {
-            Console.WriteLine(appointment._startTime.ToString("yyyy-MM-dd HH:mm")); //add description like visit with DR... or Nurse.. for health checkup....
-        }
-
-        Console.WriteLine("Press ENTER to go back to menu");
+        Console.WriteLine("Add note before continuing.");
         Console.ReadLine();
+        return;
     }
 
+    //sets the writer of the notes name from active_user
+    string doctorName = active_user.First_name + " " + active_user.Last_name;
+
+    //save to the journal, connected by SSN and time of visit
+    eventManager.AddJournalEntry(selected._ssn, selected._patientName, doctorName, selected._startTime, notes);
+
+    TryClear();
+
+    Console.WriteLine("Journal saved for" + selected._patientName + "(" + selected._startTime.ToString("yyyy-MM-dd HH:mm") + ")");
+    Console.WriteLine("-------------------------------------------------");
+    Console.WriteLine("             Press ENTER to go back to menu");
+    Console.ReadLine();
+}
+void ViewMyJournal()
+{
+    TryClear();
+
+    //reads all journallines from files
+    string fullName = active_user.First_name + " " + active_user.Last_name;
+    List<JournalEntry> journalEntries = Save_System.ReadJournal();
+
+    Console.WriteLine($"        === {fullName} JOURNAL ===\n");
+    Console.WriteLine("---------------------------------------------------\n");
+
+    bool found = false;
+
+
+    //shows only where the SSN matches active_user
+    foreach (JournalEntry entry in journalEntries)
+    {
+        if (entry.SSN == active_user.SSN)
+        {
+            found = true;
+            Console.WriteLine($"Date: {entry.AppointmentTime}");
+            Console.WriteLine($"Doctor: {entry.DoctorName}\n");
+            Console.WriteLine($"Notes: {entry.Notes}");
+            Console.WriteLine("-------------------------------------------------\n");
+        }
+    }
+
+    if (!found)
+    {
+        Console.WriteLine("You have no journal entries yet.");
+    }
+
+    Console.WriteLine("\n Press ENTER to return tp the menu");
+    Console.ReadLine();
+}
 
 
 void AddLocation()          //joel

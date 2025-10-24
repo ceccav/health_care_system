@@ -4,7 +4,7 @@ using System;
 
 namespace App;
 
-public class User
+class User
 {
     public string SSN;
     string Password;
@@ -55,7 +55,7 @@ public class User
 
 }
 
-public enum Role
+enum Role
 {
     SuperAdmin,
     Admin,
