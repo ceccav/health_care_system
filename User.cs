@@ -13,6 +13,7 @@ public class User
     public Role Role;
     public List<Permissions> Permissions = new();
     public List<Role> roles = new List<Role> { Role.Pending };
+    public List<Regions> regions = new List<Regions>();
     public Regions Regions;
     
     
@@ -23,8 +24,9 @@ public class User
         Password = password;
         First_name = first_name;
         Last_name = last_name;
-        Role = role;
         Regions = regions;
+        Role = role;
+        
     }
 
     public bool TryLogin(string ssn, string password)

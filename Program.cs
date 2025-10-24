@@ -45,7 +45,7 @@ while (running)
                     Console.WriteLine("Choose your desired region: (Skåne, Stockholm, Blekinge, Västergötland, Norrbotten, Kalmar, Jämtland, Lappland, Ångermanland, Halland, Öland, Gotland, Dalarna)");
                     string? regionsInput = Console.ReadLine();
 
-                    if (Enum.TryParse(regionsInput, true, out Regions regions) || (regions != Regions.Skåne && regions != Regions.Stockholms && regions != Regions.Blekinge && regions != Regions.Västergötland && regions != Regions.Norrbotten && regions != Regions.Kalmar && regions != Regions.Lappland && regions != Regions.Jämtland && regions != Regions.Ångermanland && regions != Regions.Halland && regions != Regions.Öland && regions != Regions.Gotland && regions != Regions.Dalarna))
+                    if (!Enum.TryParse(regionsInput, true, out Regions regions) || (regions != Regions.Skåne && regions != Regions.Stockholm && regions != Regions.Blekinge && regions != Regions.Västergötland && regions != Regions.Norrbotten && regions != Regions.Kalmar && regions != Regions.Lappland && regions != Regions.Jämtland && regions != Regions.Ångermanland && regions != Regions.Halland && regions != Regions.Öland && regions != Regions.Gotland && regions != Regions.Dalarna))
                     {
                         Console.WriteLine("Invalid region, choose a valid one");
                         break;
@@ -66,7 +66,7 @@ while (running)
                         break;
                     }
                     //gives created account for patient the role Pending
-                    Role role = Role.Pending;
+                    Role role = Role.Pending;      
 
 
 
@@ -208,13 +208,13 @@ while (running)
                         string? roleInput = Console.ReadLine();
 
                         Console.WriteLine("Choose a region for the personell: Skåne, Stockholm, Blekinge, Västergötland, Norrbotten, Kalmar, Jämtland, Lappland, Ångermanland, Halland, Öland, Gotland, Dalarna ");
-                        string regionsInput = Console.ReadLine();
+                        string? regionsInput = Console.ReadLine();
 
-                         if(Enum.TryParse(regionsInput, true, out Regions regions) || (regions != Regions.Skåne && regions != Regions.Stockholms && regions != Regions.Blekinge && regions != Regions.Västergötland && regions != Regions.Norrbotten && regions != Regions.Kalmar && regions != Regions.Lappland && regions != Regions. Jämtland && regions != Regions.Ångermanland && regions != Regions.Halland && regions != Regions.Öland && regions != Regions.Gotland && regions != Regions.Dalarna))
+                         if(!Enum.TryParse(regionsInput, true, out Regions regions) || (regions != Regions.Skåne && regions != Regions.Stockholm && regions != Regions.Blekinge && regions != Regions.Västergötland && regions != Regions.Norrbotten && regions != Regions.Kalmar && regions != Regions.Lappland && regions != Regions. Jämtland && regions != Regions.Ångermanland && regions != Regions.Halland && regions != Regions.Öland && regions != Regions.Gotland && regions != Regions.Dalarna))
                         {
                              Console.WriteLine("Invalid region, choose a valid one");
                             break;
-                         }
+                        }
 
 
                         if (!Enum.TryParse(roleInput, true, out Role role) || (role != Role.Admin && role != Role.Doctor && role != Role.Nurse)) // controls if input is one of the existing roles
@@ -454,9 +454,9 @@ void AddLocation()          //joel
 
     Console.WriteLine("---Add a location---");
 
-    App.Regions[] regions = (App.Regions[])Enum.GetValues(typeof(App.Regions));         //gets all enums
+    App.Regions[] regions = (App.Regions[])Enum.GetValues(typeof(App.Regions));         //gets all enums as an array - why ? 
     Console.WriteLine("Choose region: ");
-    for (int i = 0; i < regions.Length; i++)            //loops through all regions
+    for (int i = 0; i < regions.Length; i++)            //shows numbered list with all regions, user can pick via numbers 
     {
         Console.WriteLine($"{i + 1}. {regions[i]}");        //shows all regions
     }

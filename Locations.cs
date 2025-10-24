@@ -19,7 +19,7 @@ public enum Regions
 
 {
     Skåne,
-    Stockholms,
+    Stockholm,
     Blekinge,
     Västergötland,
     Norrbotten,

@@ -20,7 +20,7 @@ static class Save_System
         //append: true makes it possibly for us to add to the file without writing over anything
         using (StreamWriter writer = new StreamWriter(FilePath, append: true))
         {
-            writer.WriteLine($"{ssn}; {_password}; {first_name}; {last_name}; {regions} {role}");     //writer.writeline only writes to userdata.txt not in the console
+            writer.WriteLine($"{ssn}; {_password}; {first_name}; {last_name}; {regions}; {role}");     //writer.writeline only writes to userdata.txt not in the console
         }
     }
     public static void SaveUpdatedUsers(List<User> users)     //used to save accepted patient and to remove denied patients
@@ -31,7 +31,7 @@ static class Save_System
         {
             foreach (User user in users)
             {
-                writer.WriteLine($"{user.SSN}; {user.GetPasswordForSaving()}; {user.First_name}; {user.Last_name}; {user.Role}");
+                writer.WriteLine($"{user.SSN}; {user.GetPasswordForSaving()}; {user.First_name}; {user.Last_name}; {user.Regions}; {user.Role}");
             }
         }
     }
