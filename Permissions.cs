@@ -1,6 +1,6 @@
 namespace App;
 
-public enum Permissions
+enum Permissions
 {
     ViewAllUsers,   //joel - klar
     ViewMyPersonal,     //cecilia, journal, appointments 

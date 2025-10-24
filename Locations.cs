@@ -1,6 +1,6 @@
 namespace App;
 
-public enum Locations
+enum Locations
 
 {
     Skåne,

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace App;
 
 // Class holding methods to save data
-static class Save_System
+class Save_System
 {
     //searchpath for the file with user data
     private static readonly string UserFilePath = Path.Combine("data", "users.txt");
