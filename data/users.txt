@@ -1,7 +1,6 @@
-00000; test; Adam; Admin; Admin
-11111; test; Sol; Doktorn; Doctor
-22222; test; Anna; Andersson; Nurse
-33333; test; Cecilia; Cavallin; Patient
-44444; test; Joel; Sjövall; Nurse
-55555; test; Måns; Oskarsson; Patient
-66666; test; Samir; Polozen; Pending
+123123; 123; joel; test; Skåne; Pending
+123; 123; 123; 123; Skåne; Admin
+
+
+aa; aa; bajs; huve; Stockholm; Nurse
+010201; 01; Joel; Sjövall; Gotland; Pending

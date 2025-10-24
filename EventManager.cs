@@ -19,14 +19,14 @@ class EventManager
     }
 
     //Method to book a new appointment, creates an object, adds to the list of appointments and saves to file
-    public Appointment BookAppointment(string ssn, string patientName, DateTime startTime)
+    public Appointment BookAppointment(string ssn, string patientName, DateTime startTime, Regions regions)
     {
 
-        Appointment appointment = new Appointment(ssn, patientName, startTime); // creates new appointment-object
+        Appointment appointment = new Appointment(ssn, patientName, startTime, regions); // creates new appointment-object
         _appointments.Add(appointment); //adds to the list of all bookings
 
-        Save_System.SaveAppointment(ssn, patientName, startTime);
-        Console.WriteLine($"Appointment booked for {appointment._patientName}, on {appointment._startTime:yyyy-MM-dd HH:mm}"); //writes out in console
+        Save_System.SaveAppointment(ssn, patientName, startTime, regions);
+        Console.WriteLine($"Appointment booked for {appointment._patientName}, on {appointment._startTime:yyyy-MM-dd HH:mm} + {regions}"); //writes out in console
 
         return appointment;
     }

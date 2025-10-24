@@ -58,3 +58,6 @@ As a logged in user, I need to be able to view my schedule
 
 Joel nästa uppgift - gör en ny save fil som sparar alla nya registrerade sjukhus, län osv (som cecilia gjort med users)
 
+readlocation ska också kopplas till appointments så man kan se var ens appointments är 
+
+
