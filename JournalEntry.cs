@@ -11,14 +11,18 @@ class JournalEntry
     public readonly string DoctorName; //the person writing the note
     public readonly DateTime AppointmentTime; //connects the visit with the journal
     public readonly string Notes; //the journal text written by a dr or nurse
+    public readonly Regions Region; //region
+    public readonly string Hospital;
 
     //creates a new journalpost with all the info set. ssn,patient,dr,appointment and notes
-    public JournalEntry(string ssn, string patientName, string doctorName, DateTime appointmentTime, string notes)
+    public JournalEntry(string ssn, string patientName, string doctorName, DateTime appointmentTime, string notes, Regions regions, string hospital)
     {
         SSN = ssn;
         PatientName = patientName;
         DoctorName = doctorName;
         AppointmentTime = appointmentTime;
         Notes = notes;
+        Region = regions;
+        Hospital = hospital;
     }
 }

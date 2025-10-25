@@ -1,21 +1,21 @@
 namespace App;
 
-public class Location
+class Location
 {
-    public string Name;
-    public string City;
-    public string Address;
-    public string PostalCode;
+    public string? Name;
+    public string? City;
+    public string? Address;
+    public string? PostalCode;
     public Regions Region;
 
     public string Line()
     {
         return Name + ", " + City + ", " + Region + "|" + Address + ", " + PostalCode;
     }
-    
+
 }
 
-public enum Regions
+enum Regions
 
 {
     Skåne,
@@ -33,7 +33,7 @@ public enum Regions
     Dalarna,
 }
 
-public enum Cities
+enum Cities
 {
     Malmö,
     Stockholm,
