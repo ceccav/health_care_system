@@ -19,14 +19,14 @@ class EventManager
     }
 
     //Method to book a new appointment, creates an object, adds to the list of appointments and saves to file
-    public Appointment BookAppointment(string ssn, string patientName, DateTime startTime, Regions regions)
+    public Appointment BookAppointment(string ssn, string patientName, DateTime startTime, Regions regions, string hospital)
     {
 
-        Appointment appointment = new Appointment(ssn, patientName, startTime, regions); // creates new appointment-object
+        Appointment appointment = new Appointment(ssn, patientName, startTime, regions, hospital); // creates new appointment-object
         _appointments.Add(appointment); //adds to the list of all bookings
 
-        Save_System.SaveAppointment(ssn, patientName, startTime, regions);
-        Console.WriteLine($"Appointment booked for {appointment._patientName}, on {appointment._startTime:yyyy-MM-dd HH:mm} + {regions}"); //writes out in console
+        Save_System.SaveAppointment(ssn, patientName, startTime, regions, hospital);
+        Console.WriteLine($"Appointment booked for {appointment._patientName}, on {appointment._startTime:yyyy-MM-dd HH:mm} at {hospital}"); //writes out in console
 
         return appointment;
     }
@@ -52,10 +52,10 @@ class EventManager
         return matchingAppointments;
     }
     //add journalpost for a specifik visit after an appointment
-    public void AddJournalEntry(string ssn, string patientName, string doctorName, DateTime appointmentTime, string notes)
+    public void AddJournalEntry(string ssn, string patientName, string doctorName, DateTime appointmentTime, string notes, Regions region, string hospital)
     {
         //writes to journals.txt
-        Save_System.SaveJournal(ssn, patientName, doctorName, appointmentTime, notes);
+        Save_System.SaveJournal(ssn, patientName, doctorName, appointmentTime, notes, region, hospital);
     }
 
     //List all of the visits that has happened but that misses journalposts

@@ -1,2 +1,14 @@
-Skåne; Malmö; malmö sjukhus ; Södervärnsgatan 1; 123123
-
+Skåne; Malmö; Skånes Universitetssjukhus ; Inga Marie Nilssons gata 47; 21428
+Stockholm; Stockholm; Södersjukhuset; Sjukhusbacken 10; 11894
+Blekinge; Karlskrona; Blekingesjukhuset; Järnvägsgatan 6; 37132
+Västra götaland; Göteborg; Sahlgrenska Universitetssjukhus; Blå stråket 5; 41345
+Norrbotten; Luleå; Sunderby Sjukhus; Sunderbyvägen 2; 95442
+Kalmar; Kalmar; Länssjukhuset i Kalmar; Lasarettsvägen 1; 39244
+Jämtland; Östersund; Östersunds Sjukhus; Kyrkgatan 14; 83131
+Lappland; Gällivare; Gällivare Sjukhus; Lasarettsgatan 1; 98236
+Ångermanland; Örnsköldsvik; Örnsköldsviks Sjukhus; Entrégatan 19; 89189
+Halland; Halmstad; Hallands sjukhus; Lasarettsvägen 2; 98236
+Öland; Borgholm; Borgholms Hälsocentral; Storgatan 41; 38731
+Gotland; Visby; Visby Lasarett; St göransgatan 5; 62184
+Dalarna; Falun; Falu Lasarett; Lasarettsvägen 10; 79182
+Skåne; Malmö; Vårdcentral Eden; Möllevångsgatan 44; 21420

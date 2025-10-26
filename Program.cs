@@ -1,21 +1,22 @@
 ﻿using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Security;
 using App;
-EventManager eventManager = new();          // instansiates the eventhandler class
+EventManager eventManager = new();  // instansiates the eventhandler class
 
-List<User> users = new List<User>();            //List for all the users
-List<Location> locations = new List<Location>();            //List for all locations
+List<User> users = new List<User>();  //List for all the users
+List<Location> locations = new List<Location>(); //List for all locations
 bool running = true;
-User? active_user = null;           //active user set to null when the program starts in all users from data/users.txt
-//Reads in all users from data/users.txt
-users = Save_System.ReadLogins();
+User? active_user = null; //active user set to null when the program starts
+
+users = Save_System.ReadLogins(); //Reads in all users from data/users.txt
 
 
 
 while (running)
 {
-
     if (active_user == null)
     {
         TryClear();
@@ -35,6 +36,14 @@ while (running)
                     Console.Write("Enter your Social security number: ");
                     string? newssn = Console.ReadLine();
 
+                    //Controls if the username already exists
+                    bool userExists = users.Exists(u => u.SSN.Equals(newssn, StringComparison.OrdinalIgnoreCase)); //doesn't matter if it's capital or not
+                    if (userExists)
+                    {
+                        Console.WriteLine("That SSN is already taken.");
+                        break;
+                    }
+
                     Console.Write("Enter your password: ");
                     string? _newpassword = Console.ReadLine();
 
@@ -44,45 +53,40 @@ while (running)
                     Console.Write("Enter your last name: ");
                     string? newlast_name = Console.ReadLine();
 
-                    Console.WriteLine("Choose your desired region: (Skåne, Stockholm, Blekinge, Västergötland, Norrbotten, Kalmar, Jämtland, Lappland, Ångermanland, Halland, Öland, Gotland, Dalarna)");
-                    string? regionsInput = Console.ReadLine();
+                    // Console.WriteLine("Choose your desired region: (Skåne, Stockholm, Blekinge, Västergötland, Norrbotten, Kalmar, Jämtland, Lappland, Ångermanland, Halland, Öland, Gotland, Dalarna)");
+                    // string? regionsInput = Console.ReadLine();
 
-                    if (!Enum.TryParse(regionsInput, true, out Regions regions) || (regions != Regions.Skåne && regions != Regions.Stockholm && regions != Regions.Blekinge && regions != Regions.Västergötland && regions != Regions.Norrbotten && regions != Regions.Kalmar && regions != Regions.Lappland && regions != Regions.Jämtland && regions != Regions.Ångermanland && regions != Regions.Halland && regions != Regions.Öland && regions != Regions.Gotland && regions != Regions.Dalarna))
+                    // if (!Enum.TryParse(regionsInput, true, out Regions regions))
+                    // {
+                    //     Console.WriteLine("Invalid region, choose a valid one");
+                    //     break;
+                    // }
+
+                    Regions region = PickRegion(); //reads the regions from a list instead of a string
+
+                    string hospital = PickRegionHospital(region);
+                    if (string.IsNullOrWhiteSpace(hospital))
                     {
-                        Console.WriteLine("Invalid region, choose a valid one");
+                        Console.WriteLine("No hospital chosen, registration is cancelled");
                         break;
                     }
 
-
-                    if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name))
-                    {
-                        Console.WriteLine("SSN, first name, last name and password cannot be empty!");
-                        break;
-                    }
-
-                    //Controls if the username already exists
-                    bool userExists = users.Exists(u => u.SSN.Equals(newssn, StringComparison.OrdinalIgnoreCase)); //doesn't matter if it's capital or not
-                    if (userExists)
-                    {
-                        Console.WriteLine("That SSN is already taken.");
-                        break;
-                    }
                     //gives created account for patient the role Pending
-                    Role role = Role.Pending;      
+                    Role role = Role.Pending;
 
 
 
                     //create new user and add to the list
-                    User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name, regions, role);
+                    User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name, region, role, hospital);
                     users.Add(newuser);
 
                     //save user to the file
-                    Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name, regions, role);
+                    Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name, region, role, hospital);
                     Console.WriteLine("You've successfully registered as a patient!");
                     Console.ReadLine();
 
                 }
-                
+
                 break;
             case "2":
                 {
@@ -107,7 +111,7 @@ while (running)
                             active_user = user;
                             Console.WriteLine($"Welcome {user.First_name} {user.Last_name}");
                             loggedin = true;
-                            continue;
+                            break;
                         }
                     }
 
@@ -124,14 +128,14 @@ while (running)
     }
     else
     {
-        TryClear();
 
         while (true)
         {
+            TryClear();
             if (active_user == null)
                 break;
 
-            if (active_user.IsAllowed(App.Permissions.ViewAllUsers))
+            if (active_user.IsAllowed(Permissions.ViewAllUsers))
             {
                 Console.WriteLine("[1] - View all users");
             }
@@ -140,34 +144,33 @@ while (running)
                 Console.WriteLine("[2] - View booked appointment");
                 Console.WriteLine("[3] - Book an appointment");
             }
-            if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
+            if (active_user.IsAllowed(Permissions.CreateAccountPersonnel))
             {
                 Console.WriteLine("[4] - Create account for personnel");
             }
-            if (active_user.IsAllowed(App.Permissions.ViewPermissions))
+            if (active_user.IsAllowed(Permissions.ViewPermissions))
             {
                 Console.WriteLine("[5] - View users and their permissions");
             }
-            if (active_user.IsAllowed(App.Permissions.AddLocations))
+            if (active_user.IsAllowed(Permissions.AddLocations))
             {
                 Console.WriteLine("[6] - Add hospitals and their locations.");
             }
-            if (active_user.IsAllowed(App.Permissions.HandleRegistration))
+            if (active_user.IsAllowed(Permissions.HandleRegistration))
             {
                 Console.WriteLine("[7] - Handle registrations");
             }
-            if (active_user.IsAllowed(App.Permissions.WriteJournal))
+            if (active_user.IsAllowed(Permissions.WriteJournal))
             {
                 Console.WriteLine("[8] - Write journalnote");
             }
-            if (active_user.IsAllowed(App.Permissions.WriteJournal))
+            if (active_user.IsAllowed(Permissions.ViewMyPersonal))
             {
                 Console.WriteLine("[9] - See my journal");
             }
-            if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
-            {
-                Console.WriteLine("[Q] - logout");
-            }
+
+            Console.WriteLine("[Q] - logout");
+
 
 
 
@@ -176,7 +179,7 @@ while (running)
             {
                 case "1":       //if the user is allowed to view all users, show every user
                     {
-                        if (active_user.IsAllowed(App.Permissions.ViewAllUsers))        //kan använda && 
+                        if (active_user.IsAllowed(Permissions.ViewAllUsers))        //kan använda && 
                         {
                             TryClear();
                             Console.WriteLine("All users: ");
@@ -189,7 +192,7 @@ while (running)
                     break;
 
                 case "2":
-                    if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+                    if (active_user.IsAllowed(Permissions.ViewMyPersonal))
                     {
 
 
@@ -201,14 +204,14 @@ while (running)
                     break;
 
                 case "3":
-                    if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+                    if (active_user.IsAllowed(Permissions.ViewMyPersonal))
                     {
                         BookAppointment();
                     }
                     break;
 
                 case "4":
-                    if (active_user.IsAllowed(App.Permissions.CreateAccountPersonnel))
+                    if (active_user.IsAllowed(Permissions.CreateAccountPersonnel))
                     {
                         TryClear();
                         Console.WriteLine("======= REGISTER A PERSONELL =======");
@@ -224,32 +227,39 @@ while (running)
                         Console.Write("Enter the last name of the personell: ");
                         string? newlast_name = Console.ReadLine();
 
-                        Console.WriteLine("Choose a role for the personnel (Admin, Doctor, Nurse): ");
-                        string? roleInput = Console.ReadLine();
-
-                        Console.WriteLine("Choose a region for the personell: Skåne, Stockholm, Blekinge, Västergötland, Norrbotten, Kalmar, Jämtland, Lappland, Ångermanland, Halland, Öland, Gotland, Dalarna ");
-                        string? regionsInput = Console.ReadLine();
-
-                         if(!Enum.TryParse(regionsInput, true, out Regions regions) || (regions != Regions.Skåne && regions != Regions.Stockholm && regions != Regions.Blekinge && regions != Regions.Västergötland && regions != Regions.Norrbotten && regions != Regions.Kalmar && regions != Regions.Lappland && regions != Regions. Jämtland && regions != Regions.Ångermanland && regions != Regions.Halland && regions != Regions.Öland && regions != Regions.Gotland && regions != Regions.Dalarna))
+                        if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name))
                         {
-                             Console.WriteLine("Invalid region, choose a valid one");
+                            Console.WriteLine("SSN, first name, last name and password cannot be empty!");
                             break;
                         }
 
+                        Console.WriteLine("Choose a role for the personnel (Admin, Doctor, Nurse): ");
+                        string? roleInput = Console.ReadLine();
 
-                        if (!Enum.TryParse(roleInput, true, out Role role) || (role != Role.Admin && role != Role.Doctor && role != Role.Nurse)) // controls if input is one of the existing roles
+                        if (!Enum.TryParse(roleInput, true, out Role role)) // controls if input is one of the existing roles
                         {
                             Console.WriteLine("Invalid role. Please enter Admin, Doctor or Nurse.");
                             break;
                         }
 
-                        if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name)) // controls so that input isn't empty
+                        // Console.WriteLine("Choose a region for the personell: Skåne, Stockholm, Blekinge, Västergötland, Norrbotten, Kalmar, Jämtland, Lappland, Ångermanland, Halland, Öland, Gotland, Dalarna ");
+                        // string? regionsInput = Console.ReadLine();
 
-                            if (string.IsNullOrWhiteSpace(newssn) || string.IsNullOrWhiteSpace(_newpassword) || string.IsNullOrWhiteSpace(newfirst_name) || string.IsNullOrWhiteSpace(newlast_name))
-                            {
-                                Console.WriteLine("SSN, first name, last name and password cannot be empty!");
-                                break;
-                            }
+                        // if (!Enum.TryParse(regionsInput, true, out Regions regions) || (regions != Regions.Skåne && regions != Regions.Stockholm && regions != Regions.Blekinge && regions != Regions.Västergötland && regions != Regions.Norrbotten && regions != Regions.Kalmar && regions != Regions.Lappland && regions != Regions.Jämtland && regions != Regions.Ångermanland && regions != Regions.Halland && regions != Regions.Öland && regions != Regions.Gotland && regions != Regions.Dalarna))
+                        // {
+                        //     Console.WriteLine("Invalid region, choose a valid one");
+                        //     break;
+                        // }
+
+                        Regions region = PickRegion(); // reads the region from a list instead of a string.
+
+                        string hospital = PickRegionHospital(region);
+                        if (string.IsNullOrWhiteSpace(hospital))
+                        {
+                            Console.WriteLine("No hospital chosen, registration is cancelled");
+                            break;
+                        }
+
 
                         //Controls if the username already exists
                         bool userExists = users.Exists(u => u.SSN.Equals(newssn, StringComparison.OrdinalIgnoreCase));
@@ -261,11 +271,11 @@ while (running)
                         {
 
                             //create new user and add to the list
-                            User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name, regions, role);
+                            User newuser = new User(newssn, _newpassword, newfirst_name, newlast_name, region, role, hospital);
                             users.Add(newuser);
 
                             //save user to the file
-                            Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name, regions, role);
+                            Save_System.SaveLogin(newssn, _newpassword, newfirst_name, newlast_name, region, role, hospital);
                             Console.WriteLine($"The {role} account has been created");
                         }
                         Console.ReadLine();
@@ -276,7 +286,7 @@ while (running)
 
                 case "5":       //active user is allowed to view all users and their permissions
                     {
-                        if (active_user.IsAllowed(App.Permissions.ViewPermissions))     //if the user is allowed
+                        if (active_user.IsAllowed(Permissions.ViewPermissions))     //if the user is allowed
                         {
                             TryClear();
                             Console.WriteLine("All users and their permissions: ");
@@ -291,14 +301,14 @@ while (running)
                     break;
 
                 case "6":
-                    if (active_user.IsAllowed(App.Permissions.AddLocations))
+                    if (active_user.IsAllowed(Permissions.AddLocations))
                     {
                         AddLocation();
                     }
                     break;
 
                 case "7":
-                    if (active_user.IsAllowed(App.Permissions.HandleRegistration))
+                    if (active_user.IsAllowed(Permissions.HandleRegistration))
                     {
                         TryClear();
                         Console.WriteLine("All users that want to register: ");
@@ -375,18 +385,23 @@ while (running)
 
                     break;
                 case "8":
-                    if (active_user.IsAllowed(App.Permissions.WriteJournal))
+                    if (active_user.IsAllowed(Permissions.WriteJournal))
                     {
                         WriteJournalNote();
                     }
                     break;
                 case "9":
-                    if (active_user.IsAllowed(App.Permissions.ViewMyPersonal))
+                    if (active_user.IsAllowed(Permissions.ViewMyPersonal))
                     {
                         ViewMyJournal();
                     }
                     break;
                 case "q":
+                    //if user logs out, sets the active_user to null and retourns to login menu.
+                    active_user = null;
+                    break;
+                case "Q":
+                    //if user logs out, sets the active_user to null and retourns to login menu.
                     active_user = null;
                     break;
             }
@@ -441,10 +456,11 @@ void BookAppointment()
 
     Regions regions = active_user.Regions;
 
-    //Create the booking by calling the eventmanager
-    Appointment appointment = eventManager.BookAppointment(ssn, fullName, startTime, regions);
+    string hospital = active_user.Hospital;
 
-    Console.WriteLine("Press ENTER to go back to menu");
+    TryClear();
+    //Create the booking by calling the eventmanager
+    Appointment appointment = eventManager.BookAppointment(ssn, fullName, startTime, regions, hospital);
     Console.ReadLine();
 
 }
@@ -468,7 +484,7 @@ void ViewAppointment(string patientName)
     //ADD LOCATION BEFORE date and time
     foreach (Appointment appointment in myAppointments)
     {
-        Console.WriteLine(appointment._startTime.ToString("yyyy-MM-dd HH:mm")); //add description like visit with DR... or Nurse.. for health checkup....
+        Console.WriteLine(appointment._startTime.ToString("yyyy-MM-dd HH:mm") + " " + appointment.Hospital + " | " + appointment.Regions); //add description like visit with DR... or Nurse.. for health checkup....
     }
 
     Console.WriteLine("Press ENTER to go back to menu");
@@ -497,7 +513,7 @@ void WriteJournalNote()
         Console.WriteLine($"[{i + 1}] {appointment._startTime} | {appointment._patientName}");
     }
 
-    Console.Write("Select visit number");
+    Console.Write("Add notes to number: ");
     string? choiceText = Console.ReadLine();
     int id;
 
@@ -505,49 +521,7 @@ void WriteJournalNote()
     //validates choice
     if (!int.TryParse(choiceText, out id) || id < 1 || id > pending.Count)
     {
-        TryClear();
-
-        Console.WriteLine("=== Book an appointment ===");
-
-        Console.Write("Enter Date (YYYY-MM-DD): ");
-        string? dateInput = Console.ReadLine();
-
-        Console.Write("Enter time (HH:mm): ");
-        string? timeInput = Console.ReadLine();
-
-        DateTime datePart;
-        DateTime timePart;
-
-        //controls if the date is a valid date
-        if (!DateTime.TryParse(dateInput, out datePart))
-        {
-            Console.WriteLine("Not a valid date.");
-            Console.ReadLine();
-            return;
-        }
-
-        //controls if the user entered a valid time
-        if (!DateTime.TryParse(timeInput, out timePart))
-        {
-            Console.WriteLine("Not valid time.");
-            Console.ReadLine();
-            return;
-        }
-
-        //combines date and time to a completed value. .Date and .TimeOfDay shows only the date and the time isntead of the full year and so on.
-        DateTime startTime = datePart.Date + timePart.TimeOfDay;
-
-        //create patiens fullname for printOut in the console and storage
-        string fullName = active_user.First_name + " " + active_user.Last_name;
-        string ssn = active_user.SSN;
-
-        Regions regions = active_user.Regions;
-
-
-        //Create the booking by calling the eventmanager
-        Appointment appointment = eventManager.BookAppointment(ssn, fullName, startTime, regions);
-
-        Console.WriteLine("Press ENTER to go back to menu");
+        Console.WriteLine("Invalid choice.");
         Console.ReadLine();
         return;
     }
@@ -555,6 +529,7 @@ void WriteJournalNote()
     //picks out the chosen appointment to write a note for
     Appointment selected = pending[id - 1];
 
+    TryClear();
     //Lets the user (dr) write the note
     Console.WriteLine("Write notes: ");
     string? notes = Console.ReadLine();
@@ -571,11 +546,11 @@ void WriteJournalNote()
     string doctorName = active_user.First_name + " " + active_user.Last_name;
 
     //save to the journal, connected by SSN and time of visit
-    eventManager.AddJournalEntry(selected._ssn, selected._patientName, doctorName, selected._startTime, notes);
+    eventManager.AddJournalEntry(selected._ssn, selected._patientName, doctorName, selected._startTime, notes, selected.Regions, selected.Hospital);
 
     TryClear();
 
-    Console.WriteLine("Journal saved for" + selected._patientName + "(" + selected._startTime.ToString("yyyy-MM-dd HH:mm") + ")");
+    Console.WriteLine("Journal saved for " + selected._patientName + "(" + selected._startTime.ToString("yyyy-MM-dd HH:mm") + ")");
     Console.WriteLine("-------------------------------------------------");
     Console.WriteLine("             Press ENTER to go back to menu");
     Console.ReadLine();
@@ -600,6 +575,10 @@ void ViewMyJournal()
         if (entry.SSN == active_user.SSN)
         {
             found = true;
+            Console.WriteLine($"Region:" + entry.Region);
+            Console.WriteLine("Hospital: " + entry.Hospital);
+            Console.WriteLine();
+            Console.WriteLine();
             Console.WriteLine($"Date: {entry.AppointmentTime}");
             Console.WriteLine($"Doctor: {entry.DoctorName}\n");
             Console.WriteLine($"Notes: {entry.Notes}");
@@ -612,14 +591,14 @@ void ViewMyJournal()
         Console.WriteLine("You have no journal entries yet.");
     }
 
-    Console.WriteLine("\n Press ENTER to return tp the menu");
+    Console.WriteLine("\nPress ENTER to return tp the menu");
     Console.ReadLine();
 }
 
 
 void AddLocation()          //joel
 {
-    TryClear();     
+    TryClear();
 
     Console.WriteLine("---Add a location---");
 
@@ -641,11 +620,11 @@ void AddLocation()          //joel
         return;
     }
 
-    App.Regions chosenRegion = regions[regionIndex - 1];
+    Regions chosenRegion = regions[regionIndex - 1];
 
     Console.WriteLine("City: "); string? city = Console.ReadLine();
     Console.WriteLine("Address: "); string? address = Console.ReadLine();
-    Console.WriteLine("Postal code: "); string ? postal = Console.ReadLine();
+    Console.WriteLine("Postal code: "); string? postal = Console.ReadLine();
     Console.WriteLine("Hospital: "); string? name = Console.ReadLine();
 
     if (string.IsNullOrWhiteSpace(city) || string.IsNullOrWhiteSpace(address) || string.IsNullOrWhiteSpace(postal) || string.IsNullOrWhiteSpace(name))
@@ -662,6 +641,82 @@ void AddLocation()          //joel
     Console.WriteLine("Press enter to return to the main menu ");
     Console.ReadLine();
 
+}
+
+Regions PickRegion()
+{
+    //gets all regions from the enum region and lets the user pick one of them.
+    Regions[] allRegions = (Regions[])Enum.GetValues(typeof(Regions));
+    Console.WriteLine("Pick region: ");
+
+    //writes the regions starting with 1.
+    int number = 1;
+    foreach (Regions regions in allRegions)
+    {
+        Console.WriteLine(number + ". " + regions);
+        number = number + 1;
+    }
+
+    Console.Write("Number: ");
+    string? input = Console.ReadLine();
+    int index;
+
+    //controls that the input is valid
+    if (!int.TryParse(input, out index) || index < 1 || index > allRegions.Length)
+    {
+        Console.WriteLine("Not a valid choice");
+        return allRegions[0];
+    }
+
+    //returns picked region
+    return allRegions[index - 1];
+}
+
+string PickRegionHospital(Regions pickedRegion)
+{
+    //read all hospitals for the region from file
+    List<Location> allLocations = Save_System.ReadLocations();
+
+    //filter out on region
+
+    List<Location> hospitalRegion = new List<Location>();
+    foreach (Location location in allLocations)
+    {
+        if (location.Region == pickedRegion)
+        {
+            hospitalRegion.Add(location);
+        }
+    }
+
+    //if no hospitals is found in region
+    if (hospitalRegion.Count == 0)
+    {
+        Console.WriteLine("No hospitals available in this region, try another region");
+        return "";
+    }
+
+    //shows list of hospitals in the pciked region
+    Console.WriteLine("Pick hospital: ");
+    int number = 1;
+    foreach (Location location in hospitalRegion)
+    {
+        Console.WriteLine((number) + ". " + location.Name + " " + location.City + " " + location.Address + " " + location.PostalCode);
+        number = number + 1;
+    }
+
+    Console.Write("Number: ");
+    string? chosenNumber = Console.ReadLine();
+    int chosenIndex;
+
+    //controls if input is valid
+    if (!int.TryParse(chosenNumber, out chosenIndex) || chosenIndex < 1 || chosenIndex > hospitalRegion.Count)
+    {
+        Console.WriteLine("Unvalid input");
+        return "";
+    }
+
+    //returns name on the chosen hospital.
+    return hospitalRegion[chosenIndex - 1].Name;
 }
 
 

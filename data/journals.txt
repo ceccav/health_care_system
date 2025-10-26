@@ -1,4 +1,2 @@
-33333 ; Cecilia Cavallin ; Sol Doktorn ; 2025-10-19 09:00:00 ; Patient had a fever from working to hard, sent home for some rest and do not disturb on her phone.
-33333; Cecilia Cavallin ; Sol Doktorn ; 2025-10-21 13:30:00 ; Patient hade backtroubles from always working from the couch, cracked her back and sent her home withouth any meds. 
-33333; Cecilia Cavallin ; Sol Doktorn ; 2025-10-21 15:30:00 ; Patient cameback for painkillers, sent home
-55555; Måns Oskarsson ; Sol Doktorn ; 2025-10-22 13:00:00 ; Måns har mega ont nånstas
+33333; Cecilia Cavallin ; Sol Doktorn ; 2025-10-24 11:00:00 ; Came in with a fever for working to hard, sent home needs rest, candy and a good movie ; Skåne ; Skånes Universitetssjukhus
+88888; Emanuel Lowman ; Sol Doktorn ; 2025-10-05 14:45:00 ; Patient came in with a broken ankle, fixed it and sent him home with painkillers ; Stockholm ; Södersjukhuset

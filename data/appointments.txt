@@ -1,8 +1,7 @@
-33333;Cecilia Cavallin;2025-10-19 09:00
-33333;Cecilia Cavallin;2025-10-21 13:30
-33333;Cecilia Cavallin;2025-10-25 09:45
-33333;Cecilia Cavallin;2025-10-28 14:30
-33333;Cecilia Cavallin;2025-10-21 15:30
-33333;Cecilia Cavallin;2025-11-01 08:00
-55555;Måns Oskarsson;2025-10-22 13:00
-
+11111;Måns Oskarsson;2025-10-23 13:00;Skåne;Skånes Universitetssjukhus
+11111;Måns Oskarsson;2025-10-27 13:30;Skåne;Skånes Universitetssjukhus
+88888;Emanuel Lowman;2025-10-05 14:45;Stockholm;Södersjukhuset
+88888;Emanuel Lowman;2025-10-29 08:30;Stockholm;Södersjukhuset
+33333;Cecilia Cavallin;2025-10-24 10:00;Skåne;Skånes Universitetssjukhus
+33333;Cecilia Cavallin;2025-11-01 09:00;Skåne;Skånes Universitetssjukhus
+33333;Cecilia Cavallin;2025-11-15 15:30;Skåne;Skånes Universitetssjukhus

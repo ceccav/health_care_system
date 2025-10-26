@@ -12,13 +12,14 @@ class User
     public string Last_name;
     public Role Role;
     public List<Permissions> Permissions = new();
-    public List<Role> roles = new List<Role> { Role.Pending };
-    public List<Regions> regions = new List<Regions>();
+    // public List<Role> roles = new List<Role> { Role.Pending };
+    // public List<Regions> regions = new List<Regions>();
     public Regions Regions;
-    
-    
+    public string Hospital;
 
-    public User(string ssn, string password, string first_name, string last_name, Regions regions, Role role)
+
+
+    public User(string ssn, string password, string first_name, string last_name, Regions regions, Role role, string hospital)
     {
         SSN = ssn;
         Password = password;
@@ -26,7 +27,8 @@ class User
         Last_name = last_name;
         Regions = regions;
         Role = role;
-        
+        Hospital = hospital;
+
     }
 
     public bool TryLogin(string ssn, string password)
@@ -57,7 +59,6 @@ class User
 
 enum Role
 {
-    SuperAdmin,
     Admin,
     Doctor,
     Patient,

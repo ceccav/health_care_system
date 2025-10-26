@@ -1,6 +1,6 @@
-123123; 123; joel; test; Skåne; Pending
-123; 123; 123; 123; Skåne; Admin
-
-
-aa; aa; bajs; huve; Stockholm; Nurse
-010201; 01; Joel; Sjövall; Gotland; Pending
+11111; test; Måns; Oskarsson; Skåne; Patient; Skånes Universitetssjukhus
+33333; test; Cecilia; Cavallin; Skåne ; Patient ; Skånes Universitetssjukhus
+55555; test; Sol; Doktorn; Skåne; Doctor; Skånes Universitetssjukhus
+88888; test; Emanuel; Lowman; Stockholm ; Patient ; Södersjukhuset
+00000; test; Mona; Lisa; Skåne; Pending ; Vårdcentral Eden
+44444; test; Party; Myra; Halland; Pending ; Hallands sjukhus
